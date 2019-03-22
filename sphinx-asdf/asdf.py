@@ -472,8 +472,8 @@ def add_labels_to_nodes(app, document):
 
 def on_build_finished(app, exc):
     if exc is None:
-        for asset in ['asdf_schema.css', 'asdf.js']:
-            src = posixpath.join(posixpath.dirname(__file__), asset)
+        for asset in ['sphinx_asdf.css', 'sphinx_asdf.js']:
+            src = posixpath.join(posixpath.dirname(__file__), 'static', asset)
             dst = posixpath.join(app.outdir, '_static')
             copy_asset(src, dst)
 
@@ -488,8 +488,8 @@ def setup(app):
 
     add_asdf_nodes(app)
 
-    app.add_css_file('asdf_schema.css')
-    app.add_javascript('asdf.js')
+    app.add_css_file('sphinx_asdf.css')
+    app.add_javascript('sphinx_asdf.js')
 
     app.connect('builder-inited', autogenerate_schema_docs)
     app.connect('doctree-read', add_labels_to_nodes)
