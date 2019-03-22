@@ -1,5 +1,5 @@
 from .nodes import add_asdf_nodes
-from .directives import AsdfSchemas, AsdfSchema, schema_def
+from .directives import AsdfAutoschemas, AsdfSchema, schema_def
 from .connections import (autogenerate_schema_docs, add_labels_to_nodes,
                           on_build_finished)
 
@@ -10,7 +10,7 @@ def setup(app):
     # Describes a path relative to the sphinx source directory
     app.add_config_value('asdf_schema_path', 'schemas', 'env')
     app.add_config_value('asdf_schema_standard_prefix', '', 'env')
-    app.add_directive('asdf-autoschemas', AsdfSchemas)
+    app.add_directive('asdf-autoschemas', AsdfAutoschemas)
     app.add_directive('asdf-schema', AsdfSchema)
 
     add_asdf_nodes(app)

@@ -5,7 +5,7 @@ from docutils import nodes
 from docutils.frontend import OptionParser
 from sphinx.parsers import RSTParser
 from sphinx.util.fileutil import copy_asset
-from sphinx.utils.docutils import new_document
+from sphinx.util.docutils import new_document
 
 
 def find_autoasdf_directives(env, filename):

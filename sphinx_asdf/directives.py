@@ -29,7 +29,7 @@ class schema_def(nodes.comment):
     pass
 
 
-class AsdfSchemas(SphinxDirective):
+class AsdfAutoschemas(SphinxDirective):
 
     required_arguments = 0
     optional_arguments = 0
