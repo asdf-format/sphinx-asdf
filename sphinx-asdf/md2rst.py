@@ -4,6 +4,10 @@
 """
 Implements a markdown to reST converter using the mistune markdown
 parser.
+
+This module was written by Michael Droetboom and has been copied from
+http://github.com/spacetelescope/asdf-standard. See
+../licenses/ASDF_STANDARD_LICENSE.rst for license information.
 """
 
 import re
