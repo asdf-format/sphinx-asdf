@@ -7,6 +7,8 @@ from sphinx.parsers import RSTParser
 from sphinx.util.fileutil import copy_asset
 from sphinx.util.docutils import new_document
 
+from .directives import schema_def
+
 
 def find_autoasdf_directives(env, filename):
 
