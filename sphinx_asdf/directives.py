@@ -77,10 +77,10 @@ class AsdfSchema(SphinxDirective):
 
     def run(self):
 
-        config = self.state.document.settings.env.config
+        self.envconfig = self.state.document.settings.env.config
         self.schema_name = self.content[0]
-        schema_dir = config.asdf_schema_path
-        standard_prefix = config.asdf_schema_standard_prefix
+        schema_dir = self.envconfig.asdf_schema_path
+        standard_prefix = self.envconfig.asdf_schema_standard_prefix
         srcdir = self.state.document.settings.env.srcdir
 
         schema_file = posixpath.join(srcdir, schema_dir, standard_prefix,
@@ -159,6 +159,15 @@ class AsdfSchema(SphinxDirective):
         nodes = self._markdown_to_nodes(description, filename)
         return schema_description(None, *nodes)
 
+    def _resolve_reference(self, schema_id):
+        for mapping in self.envconfig.asdf_schema_reference_mappings:
+            if schema_id.startswith(mapping[0]):
+                relpath = posixpath.relpath(schema_id, mapping[0])
+                schema_id = posixpath.join(mapping[1], relpath)
+                break
+
+        return schema_id + '.html'
+
     def _create_reference(self, refname):
 
         if '#' in refname:
@@ -168,7 +177,7 @@ class AsdfSchema(SphinxDirective):
             fragment = ''
 
         if schema_id:
-            schema_id += '.html'
+            schema_id = self._resolve_reference(schema_id)
         if fragment:
             components = fragment.split('/')
             fragment = '#{}'.format('-'.join(components[1:]))
