@@ -7,7 +7,11 @@ from sphinx.parsers import RSTParser
 from sphinx.util.fileutil import copy_asset
 from sphinx.util.docutils import new_document
 
+from .nodes import schema_doc
 from .directives import schema_def
+
+
+TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 
 
 def find_autoasdf_directives(env, filename):
@@ -84,6 +88,13 @@ def autogenerate_schema_docs(app):
     schemas = find_autoschema_references(app, genfiles)
     # Create the documentation files that correspond to the schemas listed
     create_schema_docs(app, schemas)
+
+
+def handle_page_context(app, pagename, templatename, ctx, doctree):
+    # Use custom template when rendering pages containing schema documentation.
+    # This allows us to selectively include bootstrap
+    if doctree is not None and doctree.traverse(schema_doc):
+        return os.path.join(TEMPLATE_PATH, 'schema.html')
 
 
 def add_labels_to_nodes(app, document):

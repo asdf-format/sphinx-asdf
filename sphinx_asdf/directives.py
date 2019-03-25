@@ -11,7 +11,7 @@ from sphinx.util.nodes import nested_parse_with_titles
 from sphinx.util.docutils import SphinxDirective
 
 from .md2rst import md2rst
-from .nodes import (toc_link, schema_header_title, schema_title,
+from .nodes import (toc_link, schema_doc, schema_header_title, schema_title,
                     schema_description, schema_properties, schema_property,
                     schema_property_name, schema_property_details,
                     schema_combiner_body, schema_combiner_list,
@@ -92,7 +92,8 @@ class AsdfSchema(SphinxDirective):
 
         title = self._parse_title(schema.get('title', ''), schema_file)
 
-        docnodes = [title]
+        docnodes = schema_doc()
+        docnodes.append(title)
 
         description = schema.get('description', '')
         if description:
@@ -123,7 +124,7 @@ class AsdfSchema(SphinxDirective):
         docnodes.append(section_header(text=ORIGINAL_SCHEMA_SECTION_TITLE))
         docnodes.append(nodes.literal_block(text=raw_content, language='yaml'))
 
-        return docnodes
+        return [docnodes]
 
     def _create_toc(self, schema):
         toc = nodes.compound()
