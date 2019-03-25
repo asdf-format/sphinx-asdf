@@ -1,11 +1,12 @@
 import os
+import warnings
 import posixpath
 
 from docutils import nodes
-from docutils.frontend import OptionParser
-from sphinx.parsers import RSTParser
+from sphinx.io import read_doc
+from sphinx.util import rst
 from sphinx.util.fileutil import copy_asset
-from sphinx.util.docutils import new_document
+from sphinx.util.docutils import sphinx_domains
 
 from .nodes import schema_doc
 from .directives import schema_def
@@ -16,16 +17,12 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 
 def find_autoasdf_directives(env, filename):
 
-    parser = RSTParser()
-    settings = OptionParser(components=(RSTParser,)).get_default_values()
-    settings.env = env
-    document = new_document(filename, settings)
+    docname = env.path2doc(filename)
+    env.prepare_settings(docname)
+    with sphinx_domains(env), rst.default_role(docname, env.config.default_role):
+        doctree = read_doc(env.app, env, env.doc2path(docname))
 
-    with open(filename) as ff:
-        parser.parse(ff.read(), document)
-
-    return [x.children[0].astext() for x in document.traverse()
-            if isinstance(x, schema_def)]
+    return [x.children[0].astext() for x in doctree.traverse(schema_def)]
 
 
 def find_autoschema_references(app, genfiles):
