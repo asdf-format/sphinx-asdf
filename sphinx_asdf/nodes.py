@@ -8,6 +8,16 @@ headerlink_template = template_env.from_string("""
     """)
 
 
+class schema_doc(nodes.compound):
+    """Marker for the top level of the ASDF schema document"""
+
+    def visit_html(self, node):
+        pass
+
+    def depart_html(self, node):
+        pass
+
+
 class schema_title(nodes.compound):
 
     def visit_html(self, node):
@@ -199,6 +209,7 @@ class schema_combiner_item(nodes.list_item):
 
 
 custom_nodes = [
+    schema_doc,
     schema_title,
     toc_link,
     schema_header_title,
