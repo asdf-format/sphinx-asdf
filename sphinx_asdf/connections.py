@@ -4,7 +4,7 @@ import posixpath
 
 from docutils import nodes
 from sphinx.io import read_doc
-from sphinx.util import rst
+from sphinx.util import rst, logger, logging
 from sphinx.util.fileutil import copy_asset
 from sphinx.util.docutils import sphinx_domains
 
@@ -17,10 +17,15 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 
 def find_autoasdf_directives(env, filename):
 
+    orig_level = logger.getEffectiveLevel()
+    logger.setLevel(logging.LEVEL_NAMES['ERROR'])
+
     docname = env.path2doc(filename)
     env.prepare_settings(docname)
     with sphinx_domains(env), rst.default_role(docname, env.config.default_role):
         doctree = read_doc(env.app, env, env.doc2path(docname))
+
+    logger.setLevel(orig_level)
 
     return [x.children[0].astext() for x in doctree.traverse(schema_def)]
 
