@@ -99,6 +99,12 @@ def handle_page_context(app, pagename, templatename, ctx, doctree):
         return os.path.join(TEMPLATE_PATH, 'schema.html')
 
 
+def normalize_name(name):
+    for char in ['.', '_', '/']:
+        name = name.replace(char, '-')
+    return name
+
+
 def add_labels_to_nodes(app, document):
     labels = app.env.domaindata['std']['labels']
     anonlabels = app.env.domaindata['std']['anonlabels']
@@ -111,7 +117,11 @@ def add_labels_to_nodes(app, document):
         labelid = node['ids'][0]
         docname = app.env.docname
         basename = os.path.relpath(docname, basepath)
-        name = nodes.fully_normalize_name(basename + ':' + labelid)
+
+        if labelid == normalize_name(basename):
+            name = basename
+        else:
+            name = nodes.fully_normalize_name(basename + ':' + labelid)
 
         # labelname -> docname, labelid
         anonlabels[name] = docname, labelid
