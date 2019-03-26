@@ -92,6 +92,12 @@ def autogenerate_schema_docs(app):
     create_schema_docs(app, schemas)
 
 
+def update_app_config(app, config):
+    from pkg_resources import get_distribution
+    dist = get_distribution('sphinx_asdf')
+    config.html_context['sphinx_asdf_version'] = dist.version
+
+
 def handle_page_context(app, pagename, templatename, ctx, doctree):
     # Use custom template when rendering pages containing schema documentation.
     # This allows us to selectively include bootstrap
