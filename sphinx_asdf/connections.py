@@ -1,11 +1,12 @@
 import os
+import warnings
 import posixpath
 
 from docutils import nodes
-from docutils.frontend import OptionParser
-from sphinx.parsers import RSTParser
+from sphinx.io import read_doc
+from sphinx.util import rst, logger, logging
 from sphinx.util.fileutil import copy_asset
-from sphinx.util.docutils import new_document
+from sphinx.util.docutils import sphinx_domains
 
 from .nodes import schema_doc
 from .directives import schema_def
@@ -16,16 +17,17 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 
 def find_autoasdf_directives(env, filename):
 
-    parser = RSTParser()
-    settings = OptionParser(components=(RSTParser,)).get_default_values()
-    settings.env = env
-    document = new_document(filename, settings)
+    orig_level = logger.getEffectiveLevel()
+    logger.setLevel(logging.LEVEL_NAMES['ERROR'])
 
-    with open(filename) as ff:
-        parser.parse(ff.read(), document)
+    docname = env.path2doc(filename)
+    env.prepare_settings(docname)
+    with sphinx_domains(env), rst.default_role(docname, env.config.default_role):
+        doctree = read_doc(env.app, env, env.doc2path(docname))
 
-    return [x.children[0].astext() for x in document.traverse()
-            if isinstance(x, schema_def)]
+    logger.setLevel(orig_level)
+
+    return [x.children[0].astext() for x in doctree.traverse(schema_def)]
 
 
 def find_autoschema_references(app, genfiles):
@@ -97,6 +99,12 @@ def handle_page_context(app, pagename, templatename, ctx, doctree):
         return os.path.join(TEMPLATE_PATH, 'schema.html')
 
 
+def normalize_name(name):
+    for char in ['.', '_', '/']:
+        name = name.replace(char, '-')
+    return name
+
+
 def add_labels_to_nodes(app, document):
     labels = app.env.domaindata['std']['labels']
     anonlabels = app.env.domaindata['std']['anonlabels']
@@ -109,7 +117,11 @@ def add_labels_to_nodes(app, document):
         labelid = node['ids'][0]
         docname = app.env.docname
         basename = os.path.relpath(docname, basepath)
-        name = nodes.fully_normalize_name(basename + ':' + labelid)
+
+        if labelid == normalize_name(basename):
+            name = basename
+        else:
+            name = nodes.fully_normalize_name(basename + ':' + labelid)
 
         # labelname -> docname, labelid
         anonlabels[name] = docname, labelid
