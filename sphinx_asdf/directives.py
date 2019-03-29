@@ -5,6 +5,7 @@ import yaml
 
 from docutils import nodes
 from docutils.statemachine import ViewList
+from docutils.parsers.rst import directives
 
 from sphinx import addnodes
 from sphinx.util.nodes import nested_parse_with_titles
@@ -26,18 +27,24 @@ ORIGINAL_SCHEMA_SECTION_TITLE = 'Original Schema'
 
 
 class schema_def(nodes.comment):
-    pass
+
+    def __init__(self, *args, **kwargs):
+        self.schema_root = kwargs.pop('schema_root', '')
+        self.standard_prefix = kwargs.pop('standard_prefix', '')
+        super().__init__(*args, **kwargs)
 
 
 class AsdfAutoschemas(SphinxDirective):
 
     required_arguments = 0
-    optional_arguments = 0
+    optional_arguments = 2
     has_content = True
+    option_spec = {
+        'schema_root': directives.path,
+        'standard_prefix': directives.unchanged,
+    }
 
-    def _process_asdf_toctree(self):
-
-        standard_prefix = self.env.config.asdf_schema_standard_prefix
+    def _process_asdf_toctree(self, standard_prefix):
 
         links = []
         for name in self.content:
@@ -58,29 +65,44 @@ class AsdfAutoschemas(SphinxDirective):
 
     def run(self):
 
+        standard_prefix = self.options.get('standard_prefix',
+                                self.env.config.asdf_schema_standard_prefix)
+
         # This is the case when we are actually using Sphinx to generate
         # documentation
         if not getattr(self.env, 'autoasdf_generate', False):
-            return self._process_asdf_toctree()
+            return self._process_asdf_toctree(standard_prefix)
 
         # This case allows us to use docutils to parse input documents during
         # the 'builder-inited' phase so that we can determine which new
         # document need to be created by 'autogenerate_schema_docs'. This seems
         # much cleaner than writing a custom parser to extract the schema
         # information.
-        return [schema_def(text=c.strip().split()[0]) for c in self.content]
+        schema_root = self.options.get('schema_root',
+                                       self.env.config.asdf_schema_path)
+        return [schema_def(text=c.strip().split()[0],
+                           standard_prefix=standard_prefix,
+                           schema_root=schema_root)
+                for c in self.content]
 
 
 class AsdfSchema(SphinxDirective):
 
     has_content = True
+    optional_arguments = 2
+    option_spec = {
+        'schema_root': directives.path,
+        'standard_prefix': directives.unchanged,
+    }
 
     def run(self):
 
         self.envconfig = self.state.document.settings.env.config
         self.schema_name = self.content[0]
-        schema_dir = self.envconfig.asdf_schema_path
-        standard_prefix = self.envconfig.asdf_schema_standard_prefix
+        schema_dir = self.options.get('schema_root',
+                                      self.envconfig.asdf_schema_path)
+        standard_prefix = self.options.get('standard_prefix',
+                                    self.envconfig.asdf_schema_standard_prefix)
         srcdir = self.state.document.settings.env.srcdir
 
         schema_file = posixpath.join(srcdir, schema_dir, standard_prefix,

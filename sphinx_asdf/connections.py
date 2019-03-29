@@ -27,7 +27,7 @@ def find_autoasdf_directives(env, filename):
 
     logger.setLevel(orig_level)
 
-    return [x.children[0].astext() for x in doctree.traverse(schema_def)]
+    return doctree.traverse(schema_def)
 
 
 def find_autoschema_references(app, genfiles):
@@ -53,11 +53,11 @@ def find_autoschema_references(app, genfiles):
 
 def create_schema_docs(app, schemas):
 
-    standard_prefix = app.env.config.asdf_schema_standard_prefix
-    output_dir = posixpath.join(app.srcdir, 'generated', standard_prefix)
-    os.makedirs(output_dir, exist_ok=True)
-
-    for schema_name in schemas:
+    for schema in schemas:
+        schema_name = schema.children[0].astext()
+        standard_prefix = (schema.standard_prefix or
+                           app.env.config.asdf_schema_standard_prefix)
+        output_dir = posixpath.join(app.srcdir, 'generated', standard_prefix)
         doc_path = posixpath.join(output_dir, schema_name + '.rst')
 
         if posixpath.exists(doc_path):
@@ -68,7 +68,10 @@ def create_schema_docs(app, schemas):
         with open(doc_path, 'w') as ff:
             ff.write(schema_name + '\n')
             ff.write('=' * len(schema_name) + '\n\n')
-            ff.write('.. asdf-schema::\n\n')
+            ff.write('.. asdf-schema::\n')
+            if standard_prefix:
+                ff.write('    :standard_prefix: {}\n'.format(standard_prefix))
+            ff.write('    :schema_root: {}\n\n'.format(schema.schema_root))
             ff.write('    {}\n'.format(schema_name))
 
 
