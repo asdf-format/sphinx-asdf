@@ -1,10 +1,11 @@
 import os
+import logging
 import warnings
 import posixpath
 
 from docutils import nodes
 from sphinx.io import read_doc
-from sphinx.util import rst, logger, logging
+from sphinx.util import rst
 from sphinx.util.fileutil import copy_asset
 from sphinx.util.docutils import sphinx_domains
 
@@ -17,15 +18,10 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 
 def find_autoasdf_directives(env, filename):
 
-    orig_level = logger.getEffectiveLevel()
-    logger.setLevel(logging.LEVEL_NAMES['ERROR'])
-
     docname = env.path2doc(filename)
     env.prepare_settings(docname)
     with sphinx_domains(env), rst.default_role(docname, env.config.default_role):
         doctree = read_doc(env.app, env, env.doc2path(docname))
-
-    logger.setLevel(orig_level)
 
     return doctree.traverse(schema_def)
 
@@ -38,12 +34,18 @@ def find_autoschema_references(app, genfiles):
     # is actually built.
     app.env.autoasdf_generate = True
 
+    logger = logging.getLogger('sphinx')
+    orig_level = logger.getEffectiveLevel()
+    logger.setLevel(logging.ERROR)
+
     schemas = set()
     for fn in genfiles:
         # Create documentation files based on contents of asdf-schema directives
         path = posixpath.join(app.env.srcdir, fn)
         app.env.temp_data['docname'] = app.env.path2doc(path)
         schemas = schemas.union(find_autoasdf_directives(app.env, path))
+
+    logger.setLevel(orig_level)
 
     # Unset this variable now that we're done.
     app.env.autoasdf_generate = False
