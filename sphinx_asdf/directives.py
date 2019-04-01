@@ -233,9 +233,20 @@ class AsdfSchema(SphinxDirective):
                                              path=path)
 
         node_list = nodes.compound()
-        node_list.append(nodes.line(
-            text='Items in the array are restricted to the following types:'))
-        node_list.append(self._process_properties(items, top=True, path=path))
+        if isinstance(items, list):
+            text = "The first {} item{} in the list must be the following types:"
+            node_list.append(nodes.line(
+                text=text.format(len(items), 's' if len(items) > 1 else '')))
+            item_list = nodes.bullet_list()
+            for i, it in enumerate(items):
+                item_path = self._append_to_path(path, i)
+                item_list.append(self._process_properties(it, top=True,
+                                                          path=item_path))
+            node_list.append(item_list)
+        else:
+            node_list.append(nodes.line(
+                text='Items in the array are restricted to the following types:'))
+            node_list.append(self._process_properties(items, top=True, path=path))
         return node_list
 
     def _process_validation_keywords(self, schema, typename=None, path=''):
