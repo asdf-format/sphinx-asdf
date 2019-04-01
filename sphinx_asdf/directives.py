@@ -191,7 +191,7 @@ class AsdfSchema(SphinxDirective):
 
         return schema_id + '.html'
 
-    def _create_reference(self, refname):
+    def _create_reference(self, refname, shorten=False):
 
         if '#' in refname:
             schema_id, fragment = refname.split('#')
@@ -204,10 +204,10 @@ class AsdfSchema(SphinxDirective):
         if fragment:
             components = fragment.split('/')
             fragment = '#{}'.format('-'.join(components[1:]))
-            refname = components[-1]
-
-        if schema_id and fragment:
-            refname = '{}#{}'.format(schema_id, refname)
+            if shorten and not schema_id:
+                refname = components[-1]
+        elif shorten:
+            rename = schema_id
 
         return refname, schema_id + fragment
 
@@ -372,7 +372,7 @@ class AsdfSchema(SphinxDirective):
         description = tree.get('description', '')
 
         if '$ref' in tree:
-            typ, ref = self._create_reference(tree.get('$ref'))
+            typ, ref = self._create_reference(tree.get('$ref'), shorten=True)
         else:
             typ = tree.get('type', 'object')
             ref = None
