@@ -268,14 +268,17 @@ class AsdfSchema(SphinxDirective):
                                                      language='none'))
 
         elif typename == 'array':
-            if not ('minItems' in schema or 'maxItems' in schema):
-                node_list.append(nodes.emphasis(text='No length restriction'))
             if schema.get('minItems', 0):
                 text = 'Minimum length: {}'.format(schema['minItems'])
                 node_list.append(nodes.line(text=text))
             if 'maxItems' in schema:
                 text = 'Maximum length: {}'.format(schema['maxItems'])
                 node_list.append(nodes.line(text=text))
+            if 'additionalItems' in schema and 'items' in schema:
+                if isinstance(schema['items'], list) and schema['additionalItems'] == False:
+                    node_list.append(nodes.emphasis(text='Additional items not permitted'))
+            elif not ('minItems' in schema or 'maxItems' in schema):
+                node_list.append(nodes.emphasis(text='No length restriction'))
 
             if 'items' in schema:
                 node_list.append(self._create_array_items_node(schema['items'],
