@@ -185,11 +185,16 @@ class AsdfSchema(SphinxDirective):
     def _resolve_reference(self, schema_id):
         for mapping in self.envconfig.asdf_schema_reference_mappings:
             if schema_id.startswith(mapping[0]):
-                relpath = posixpath.relpath(schema_id, mapping[0])
-                schema_id = posixpath.join(mapping[1], relpath)
+                relpath = posixpath.relpath(schema_id, mapping[0]).strip('/')
+                if relpath == '.':
+                    relpath = ''
+                schema_id = posixpath.join(mapping[1], relpath).strip('/')
                 break
 
-        return schema_id + '.html'
+        if not schema_id.endswith('.html'):
+            schema_id += '.html'
+
+        return schema_id
 
     def _create_reference(self, refname, shorten=False):
 
