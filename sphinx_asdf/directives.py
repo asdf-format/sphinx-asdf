@@ -185,11 +185,16 @@ class AsdfSchema(SphinxDirective):
     def _resolve_reference(self, schema_id):
         for mapping in self.envconfig.asdf_schema_reference_mappings:
             if schema_id.startswith(mapping[0]):
-                relpath = posixpath.relpath(schema_id, mapping[0])
-                schema_id = posixpath.join(mapping[1], relpath)
+                relpath = posixpath.relpath(schema_id, mapping[0]).strip('/')
+                if relpath == '.':
+                    relpath = ''
+                schema_id = posixpath.join(mapping[1], relpath).strip('/')
                 break
 
-        return schema_id + '.html'
+        if not schema_id.endswith('.html'):
+            schema_id += '.html'
+
+        return schema_id
 
     def _create_reference(self, refname, shorten=False):
 
@@ -233,9 +238,20 @@ class AsdfSchema(SphinxDirective):
                                              path=path)
 
         node_list = nodes.compound()
-        node_list.append(nodes.line(
-            text='Items in the array are restricted to the following types:'))
-        node_list.append(self._process_properties(items, top=True, path=path))
+        if isinstance(items, list):
+            text = "The first {} item{} in the list must be the following types:"
+            node_list.append(nodes.line(
+                text=text.format(len(items), 's' if len(items) > 1 else '')))
+            item_list = nodes.bullet_list()
+            for i, it in enumerate(items):
+                item_path = self._append_to_path(path, i)
+                item_list.append(self._process_properties(it, top=True,
+                                                          path=item_path))
+            node_list.append(item_list)
+        else:
+            node_list.append(nodes.line(
+                text='Items in the array are restricted to the following types:'))
+            node_list.append(self._process_properties(items, top=True, path=path))
         return node_list
 
     def _process_validation_keywords(self, schema, typename=None, path=''):
@@ -257,14 +273,17 @@ class AsdfSchema(SphinxDirective):
                                                      language='none'))
 
         elif typename == 'array':
-            if not ('minItems' in schema or 'maxItems' in schema):
-                node_list.append(nodes.emphasis(text='No length restriction'))
             if schema.get('minItems', 0):
                 text = 'Minimum length: {}'.format(schema['minItems'])
                 node_list.append(nodes.line(text=text))
             if 'maxItems' in schema:
                 text = 'Maximum length: {}'.format(schema['maxItems'])
                 node_list.append(nodes.line(text=text))
+            if 'additionalItems' in schema and 'items' in schema:
+                if isinstance(schema['items'], list) and schema['additionalItems'] == False:
+                    node_list.append(nodes.emphasis(text='Additional items not permitted'))
+            elif not ('minItems' in schema or 'maxItems' in schema):
+                node_list.append(nodes.emphasis(text='No length restriction'))
 
             if 'items' in schema:
                 node_list.append(self._create_array_items_node(schema['items'],

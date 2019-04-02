@@ -84,7 +84,7 @@ class RstRenderer(object):
     def block_code(self, code, lang=None):
         code = code.rstrip('\n')
         if lang:
-            langs = lang
+            langs = [lang]
         else:
             langs = ['none']
         return self._directive('code-block', code, langs)
