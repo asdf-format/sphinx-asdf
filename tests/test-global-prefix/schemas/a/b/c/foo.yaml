@@ -1,0 +1,8 @@
+%YAML 1.1
+---
+$schema: "http://stsci.edu/schemas/yaml-schema/draft-01"
+id: "http://stsci.edu/schemas/sphinx-asdf/testing/foo"
+tag: "tag:stsci.edu:sphinx-asdf/testing/foo"
+title: |
+  Schema for testing sphinx-asdf plugin
+...
