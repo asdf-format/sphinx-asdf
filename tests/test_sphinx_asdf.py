@@ -8,7 +8,7 @@ from sphinx.testing.path import path
 
 @pytest.fixture(scope='session')
 def rootdir():
-    return path(__file__).parent.abspath()
+    return path(__file__).parent.abspath() / 'roots'
 
 
 @pytest.fixture(scope='session')
