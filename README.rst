@@ -140,6 +140,11 @@ following::
 This would eliminate the need to set global settings. It also allows any
 global settings to be overridden on a per-directive basis.
 
+.. note::
+
+   The ``:schema_root:`` argument requires a path that is relative to
+   the ``sphinx`` configuration file.
+
 External References
 *******************
 
