@@ -1,9 +1,13 @@
 import os
+import pickle
 
 import pytest
 from tempfile import gettempdir
 
+from docutils import nodes
 from sphinx.testing.path import path
+
+from sphinx_asdf import nodes as sa_nodes
 
 
 @pytest.fixture(scope='session')
@@ -100,3 +104,19 @@ def test_generation_global_prefix(app, status, warning):
             '    :schema_root: schemas\n'
             '\n'
             '    core/baz\n') in baz_doc.text()
+
+
+@pytest.mark.sphinx('dummy', testroot='basic-generation')
+def test_basic_build(app, status, warning):
+    app.builder.build_all()
+
+    # Test each of the generated schema documents
+    for name in ['foo', 'bar', 'core/baz']:
+        doctree_path = app.doctreedir / 'generated' / '{}.doctree'.format(name)
+        doc = pickle.loads(doctree_path.bytes())
+
+        title = doc.traverse(nodes.title)[0]
+        assert title.astext() == name
+
+        schema_top = doc.traverse(sa_nodes.schema_doc)
+        assert len(schema_top) > 0
