@@ -28,6 +28,8 @@ env:
         - TOXENV='checkdocs'
         - TOXENV='py36'
         - TOXENV='py37'
+        # Make sure we haven't broken the build of ASDF Standard docs
+        - TOXENV='asdf-standard'
 
 matrix:
     fast_finish: true
