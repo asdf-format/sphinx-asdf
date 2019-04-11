@@ -1,0 +1,59 @@
+language: python
+
+os:
+    - linux
+
+# Use Travis' container-based architecture
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - graphviz
+    - texlive-latex-extra
+    - dvipng
+
+env:
+    global:
+        # The following versions are the 'default' for tests, unless
+        # overidden underneath. They are defined here in order to save having
+        # to repeat them for all configurations.
+        - TOX_CMD='tox --'
+        - TOX_ARGS=''
+
+    matrix:
+        # Make sure that installation does not fail
+        - TOXENV='py36' TOX_CMD='tox --notest' TOX_ARGS=''
+        # Make sure README will display properly on pypi
+        - TOXENV='checkdocs'
+        - TOXENV='py36'
+        - TOXENV='py37'
+
+matrix:
+    fast_finish: true
+    include:
+
+        # Do a coverage test
+        - env: TOXENV='coverage' TOX_ARGS=''
+
+        # Perform a sanity check of packaging using twine
+        - env: TOXENV='twine' TOX_ARGS=''
+
+        # Do a code style check
+        - env: TOXENV='style' TOX_ARGS=''
+
+        # Try a run on OSX
+        - os: osx
+          env: TOXENV='py37'
+
+        - os: windows
+          env: TOXENV='py36'
+
+        - os: windows
+          env: TOXENV='py37'
+
+install:
+    - pip install tox
+
+script:
+   - $TOX_CMD $TOX_ARGS
