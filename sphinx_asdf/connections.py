@@ -2,6 +2,7 @@ import os
 import logging
 import warnings
 import posixpath
+import re
 
 from docutils import nodes
 from sphinx.io import read_doc
@@ -14,6 +15,8 @@ from .directives import schema_def
 
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
+
+RE_DIRECTIVES = re.compile(r'asdf-(auto)?schema')
 
 
 def find_autoasdf_directives(env, filename):
@@ -42,6 +45,11 @@ def find_autoschema_references(app, genfiles):
     for fn in genfiles:
         # Create documentation files based on contents of asdf-schema directives
         path = posixpath.join(app.env.srcdir, fn)
+        with open(path) as f:
+            # Parsing RST files is slow, so before we check if one of the asdf
+            # directives is present.
+            if not re.search(RE_DIRECTIVES, f.read()):
+                continue
         app.env.temp_data['docname'] = app.env.path2doc(path)
         schemas = schemas.union(find_autoasdf_directives(app.env, path))
 
