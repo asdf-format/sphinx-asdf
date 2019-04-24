@@ -7,6 +7,10 @@ documentation from `ASDF`_ schemas.
 Installation
 ------------
 
+To install the latest release on PyPI::
+
+    $ pip install sphinx-asdf
+
 The latest development version is available from the ``master`` branch `on
 github`_. To clone the project:
 
