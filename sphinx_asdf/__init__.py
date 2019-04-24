@@ -21,9 +21,6 @@ def setup(app):
 
     add_asdf_nodes(app)
 
-    app.add_css_file('sphinx_asdf.css')
-    app.add_js_file('sphinx_asdf.js')
-
     app.connect('builder-inited', autogenerate_schema_docs)
     app.connect('config-inited', update_app_config)
     app.connect('html-page-context', handle_page_context)
