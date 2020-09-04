@@ -16,7 +16,7 @@ github`_. To clone the project:
 
 ::
 
-    $ git clone https://github.com/spacetelescope/sphinx-asdf
+    $ git clone https://github.com/asdf-format/sphinx-asdf
 
 To install:
 
@@ -208,7 +208,7 @@ abiding to the `Code of Conduct <CODE_OF_CONDUCT.md>`__.
 
 .. _ASDF: https://asdf-standard.readthedocs.io/en/latest
 .. _sphinx: https://www.sphinx-doc.org/en/master
-.. _on github: https://github.com/spacetelescope/sphinx-asdf
+.. _on github: https://github.com/asdf-format/sphinx-asdf
 .. _development mode: https://packaging.python.org/tutorials/distributing-packages/#working-in-development-mode
 .. _sphinx directives: https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html
 .. _table of contents: https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#table-of-contents
