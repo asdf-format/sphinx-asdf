@@ -355,6 +355,9 @@ class AsdfSchema(SphinxDirective):
         elif '$ref' in schema:
             ref = self._create_ref_node(schema['$ref'])
             return schema_properties(None, *[ref], id=path)
+        elif 'tag' in schema:
+            ref = self._create_ref_node(schema['tag'])
+            return schema_properties(None, *[ref], id=path)
         else:
             text = nodes.emphasis(text='This node has no type definition (unrestricted)')
             return schema_properties(None, text, id=path)
@@ -392,6 +395,8 @@ class AsdfSchema(SphinxDirective):
 
         if '$ref' in tree:
             typ, ref = self._create_reference(tree.get('$ref'), shorten=True)
+        if 'tag' in tree:
+            typ, ref = self._create_reference(tree.get('tag'), shorten=True)
         else:
             typ = tree.get('type', 'object')
             ref = None
