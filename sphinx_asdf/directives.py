@@ -326,7 +326,7 @@ class AsdfSchema(SphinxDirective):
                     language='yaml'))
                 node_list.append(default_node)
             else:
-                text = f'{entry}: {entry}'
+                text = f'{key}: {entry}'
                 node_list.append(nodes.line(text=text))
 
         if 'wx_unit' in schema:
