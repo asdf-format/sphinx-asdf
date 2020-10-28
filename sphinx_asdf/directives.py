@@ -144,6 +144,14 @@ class AsdfSchema(SphinxDirective):
                                                            name in required,
                                                            path=path))
 
+        if 'wx_unit' in schema:
+            wx_node = make_wx_node(schema, 'wx_unit')
+            docnodes.append(wx_node)
+
+        if 'wx_shape' in schema:
+            wx_node = make_wx_node(schema, 'wx_shape', default_flow_style=None)
+            docnodes.append(wx_node)
+
         docnodes.append(section_header(text=ORIGINAL_SCHEMA_SECTION_TITLE))
         docnodes.append(nodes.literal_block(text=raw_content, language='yaml'))
 
