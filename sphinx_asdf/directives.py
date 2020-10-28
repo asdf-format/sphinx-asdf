@@ -18,6 +18,7 @@ from .nodes import (toc_link, schema_doc, schema_header_title, schema_title,
                     schema_combiner_body, schema_combiner_list,
                     schema_combiner_item, section_header, asdf_tree, asdf_ref,
                     example_section, example_item, example_description)
+from .weldx_tools import make_wx_node
 
 
 SCHEMA_DEF_SECTION_TITLE = 'Schema Definitions'
@@ -316,24 +317,13 @@ class AsdfSchema(SphinxDirective):
                                                         language='none'))
                 node_list.append(default_node)
 
-        def _append_wx_node(key, default_flow_style=False):
-            entry = schema[key]
-            if isinstance(entry, dict):
-                default_node = nodes.compound()
-                default_node.append(nodes.line(text=key+":"))
-                default_node.append(nodes.literal_block(
-                    text=yaml.dump(entry, default_flow_style=default_flow_style),
-                    language='yaml'))
-                node_list.append(default_node)
-            else:
-                text = f'{key}: {entry}'
-                node_list.append(nodes.line(text=text))
-
         if 'wx_unit' in schema:
-            _append_wx_node('wx_unit')
+            wx_node = make_wx_node(schema, 'wx_unit')
+            node_list.append(wx_node)
 
         if 'wx_shape' in schema:
-            _append_wx_node('wx_shape', default_flow_style=None)
+            wx_node = make_wx_node(schema, 'wx_shape', default_flow_style=None)
+            node_list.append(wx_node)
 
         return node_list
 
