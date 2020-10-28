@@ -316,13 +316,24 @@ class AsdfSchema(SphinxDirective):
                                                         language='none'))
                 node_list.append(default_node)
 
+        def _append_wx_node(key, default_flow_style=False):
+            entry = schema[key]
+            if isinstance(entry, dict):
+                default_node = nodes.compound()
+                default_node.append(nodes.line(text=key+":"))
+                default_node.append(nodes.literal_block(
+                    text=yaml.dump(entry, default_flow_style=default_flow_style),
+                    language='yaml'))
+                node_list.append(default_node)
+            else:
+                text = f'{entry}: {entry}'
+                node_list.append(nodes.line(text=text))
+
         if 'wx_unit' in schema:
-            text = f'wx_unit: {schema["wx_unit"]}'
-            node_list.append(nodes.line(text=text))
+            _append_wx_node('wx_unit')
 
         if 'wx_shape' in schema:
-            text = f'wx_shape: {str(schema["wx_shape"])}'
-            node_list.append(nodes.line(text=text))
+            _append_wx_node('wx_shape', default_flow_style=None)
 
         return node_list
 
