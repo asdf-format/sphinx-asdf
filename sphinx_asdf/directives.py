@@ -316,6 +316,14 @@ class AsdfSchema(SphinxDirective):
                                                         language='none'))
                 node_list.append(default_node)
 
+        if 'wx_unit' in schema:
+            text = f'wx_unit: {schema["wx_unit"]}'
+            node_list.append(nodes.line(text=text))
+
+        if 'wx_shape' in schema:
+            text = f'wx_shape: {str(schema["wx_shape"])}'
+            node_list.append(nodes.line(text=text))
+
         return node_list
 
     def _process_top_type(self, schema, path=''):
