@@ -396,7 +396,10 @@ class AsdfSchema(SphinxDirective):
         if '$ref' in tree:
             typ, ref = self._create_reference(tree.get('$ref'), shorten=True)
         elif 'tag' in tree:
-            typ, ref = self._create_reference(tree.get('tag'), shorten=True)
+            _tag = tree.get('tag')
+            typ, ref = self._create_reference(_tag, shorten=True)
+            if '*' in _tag:
+                ref = None
         else:
             typ = tree.get('type', 'object')
             ref = None
