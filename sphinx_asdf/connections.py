@@ -40,6 +40,8 @@ def find_autoschema_references(app, genfiles):
 
     schemas = set()
     for fn in genfiles:
+        if fn.startswith('_autosummary'):
+            continue
         # Create documentation files based on contents of asdf-schema directives
         path = posixpath.join(app.env.srcdir, fn)
         app.env.temp_data['docname'] = app.env.path2doc(path)
