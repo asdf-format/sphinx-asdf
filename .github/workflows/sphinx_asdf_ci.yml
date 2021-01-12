@@ -16,6 +16,15 @@ jobs:
     strategy:
       matrix:
         include:
+          - name: Python 3.9
+            python-version: 3.9
+            os: ubuntu-latest
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install .[tests]
+              python -m pip install sphinx
+            toxenv: py39
+
           - name: Code Style Checks
             python-version: 3.9
             os: ubuntu-latest
