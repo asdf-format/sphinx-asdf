@@ -25,6 +25,32 @@ jobs:
               python -m pip install sphinx
             toxenv: py39
 
+          - name: Python 3.9, Windows
+            python-version: 3.9
+            os: windows-latest
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install .[tests]
+              python -m pip install sphinx
+            toxenv: py39
+
+          - name: Python 3.9, MacOS
+            python-version: 3.9
+            os: macos-latest
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install .[tests]
+              python -m pip install sphinx
+            toxenv: py39
+
+          - name: ASDF Standard Build
+            python-version: 3.9
+            os: ubuntu-latest
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install sphinx
+            toxenv: asdf-standard
+
           - name: Code Style Checks
             python-version: 3.9
             os: ubuntu-latest
@@ -32,6 +58,14 @@ jobs:
               python -m pip install --upgrade pip
               python -m pip install flake8
             toxenv: style
+
+          - name: Twine
+            python-version: 3.9
+            os: ubuntu-latest
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install twine
+            toxenv: twine
 
     steps:
       - name: Checkout code
