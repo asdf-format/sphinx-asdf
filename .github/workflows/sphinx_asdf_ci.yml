@@ -16,13 +16,13 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Python 3.9
+          - name: Code Style Checks
             python-version: 3.9
             os: ubuntu-latest
-            dependencies: |
-              git clone https://github.com/spacetelescope/asdf-standard
-              sphinx-build asdf-standard/source asdf-standard/build
-            toxenv: asdf-standard
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install flake8
+            toxenv: 
 
     steps:
       - name: Checkout code
@@ -35,8 +35,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Dependencies
         run: |
+          ${{ matrix.script }}
+      - name: Install tox
+        run: |
           python -m pip install --upgrade pip
           python -m pip install tox
-          ${{ matrix.dependencies }}
       - name: Run tox
         run: tox -e ${{ matrix.toxenv }}
