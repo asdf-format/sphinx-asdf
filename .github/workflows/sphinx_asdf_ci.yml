@@ -19,7 +19,7 @@ jobs:
           - name: Python 3.9
             python-version: "3.9"
             os: ubuntu-latest
-            toxenv: py39
+            toxenv: py39-coverage
 
           - name: Python 3.9, Windows
             python-version: "3.9"
@@ -50,11 +50,6 @@ jobs:
             python-version: "3.9"
             os: ubuntu-latest
             toxenv: asdf-standard
-
-          - name: Code Coverage
-            python-version: "3.9"
-            os: ubuntu-latest
-            toxenv: coverage
 
     steps:
       - name: Checkout code
