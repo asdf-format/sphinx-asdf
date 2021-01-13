@@ -16,31 +16,42 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Python 3.9, Windows
-            python-version: 3.9
-            os: windows-latest
-            script: |
-              python -m pip install --upgrade pip
-              python -m pip install .[tests]
-              python -m pip install sphinx
-            toxenv: py39
-
-          - name: Python 3.9, MacOS
-            python-version: 3.9
-            os: macos-latest
-            script: |
-              python -m pip install --upgrade pip
-              python -m pip install .[tests]
-              python -m pip install sphinx
-            toxenv: py39
-
-          - name: ASDF Standard Build
+          - name: Python 3.9
             python-version: 3.9
             os: ubuntu-latest
             script: |
               python -m pip install --upgrade pip
+              python -m pip install .[tests]
+              python -m pip install collective.checkdocs
               python -m pip install sphinx
-            toxenv: asdf-standard
+            toxenv: checkdocs
+
+          - name: Python 3.8
+            python-version: 3.8
+            os: ubuntu-latest
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install .[tests]
+              python -m pip install sphinx
+            toxenv: py38
+
+          - name: Python 3.7
+            python-version: 3.7
+            os: ubuntu-latest
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install .[tests]
+              python -m pip install sphinx
+            toxenv: py37
+
+          - name: Python 3.6
+            python-version: 3.6
+            os: ubuntu-latest
+            script: |
+              python -m pip install --upgrade pip
+              python -m pip install .[tests]
+              python -m pip install sphinx
+            toxenv: py36
 
     steps:
       - name: Checkout code
