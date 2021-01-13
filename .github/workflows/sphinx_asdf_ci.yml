@@ -21,51 +21,6 @@ jobs:
             os: ubuntu-latest
             toxenv: py39
 
-          - name: Python 3.8
-            python-version: "3.8"
-            os: ubuntu-latest
-            toxenv: py38
-
-          - name: Python 3.7
-            python-version: "3.7"
-            os: ubuntu-latest
-            toxenv: py37
-
-          - name: Python 3.9, Windows
-            python-version: "3.9"
-            os: windows-latest
-            toxenv: py39
-
-          - name: Python 3.9, MacOS
-            python-version: "3.9"
-            os: macos-latest
-            toxenv: py39
-
-          - name: Twine
-            python-version: "3.9"
-            os: ubuntu-latest
-            toxenv: twine
-
-          - name: Document Checks
-            python-version: "3.9"
-            os: ubuntu-latest
-            toxenv: checkdocs
-
-          - name: Code Style Checks
-            python-version: "3.9"
-            os: ubuntu-latest
-            toxenv: style
-
-          - name: ASDF Standard Document Build
-            python-version: "3.9"
-            os: ubuntu-latest
-            toxenv: asdf-standard
-
-          - name: Code Coverage
-            python-version: "3.9"
-            os: ubuntu-latest
-            toxenv: codecov
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -80,8 +35,3 @@ jobs:
           python -m pip install tox
       - name: Run tox
         run: tox -e ${{ matrix.toxenv }}
-      - name: Upload coverage to codecoverage
-        if: ${{ contains(matrix.toxenv,'coverage') }}
-        uses: codecov/codecov-action@v1
-        with:
-          file: ./coverage.xml
