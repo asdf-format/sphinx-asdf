@@ -54,7 +54,7 @@ jobs:
           - name: Code Coverage
             python-version: "3.9"
             os: ubuntu-latest
-            toxenv: codecov
+            toxenv: coverage
 
     steps:
       - name: Checkout code
