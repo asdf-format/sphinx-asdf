@@ -51,6 +51,11 @@ jobs:
             os: ubuntu-latest
             toxenv: asdf-standard
 
+          - name: Code Coverage
+            python-version: "3.9"
+            os: ubuntu-latest
+            toxenv: codecov
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
