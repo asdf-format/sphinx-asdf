@@ -16,10 +16,10 @@ jobs:
     strategy:
       matrix:
         include: 
-          - name: Python 3.9
+          - name: Python 3.9, with Code Coverage
             python-version: "3.9"
             os: ubuntu-latest
-            toxenv: py39-coverage
+            toxenv: coverage
 
           - name: Python 3.9, Windows
             python-version: "3.9"
