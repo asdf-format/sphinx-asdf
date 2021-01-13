@@ -33,11 +33,11 @@ jobs:
         run: tox
 
   tox_env:
-    name: Python Testing ${{ matrix.toxenv }} 
+    name: Tox Environment - ${{ matrix.toxenv }} 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        toxenv: ["twine", "checkdocs", "style", "asdf-standard"]
+        toxenv: ["twine", "checkdocs", "style", "asdf-standard", "coverage"]
 
     steps:
       - name: Checkout code
