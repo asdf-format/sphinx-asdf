@@ -54,7 +54,7 @@ jobs:
       - name: Run tox
         run: tox -e ${{ matrix.toxenv }}
       - name: Upload coverage to codecoverage
-        if: ${{ contains(matrix.toxenv, "coverage") }}
+        if: ${{ contains(matrix.toxenv,'coverage') }}
         uses: codecov/codecov-action@v1
         with:
           file: ./coverage.xml
