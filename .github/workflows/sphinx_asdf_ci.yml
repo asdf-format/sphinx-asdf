@@ -22,36 +22,8 @@ jobs:
             script: |
               python -m pip install --upgrade pip
               python -m pip install .[tests]
-              python -m pip install collective.checkdocs
               python -m pip install sphinx
-            toxenv: checkdocs
-
-          - name: Python 3.8
-            python-version: 3.8
-            os: ubuntu-latest
-            script: |
-              python -m pip install --upgrade pip
-              python -m pip install .[tests]
-              python -m pip install sphinx
-            toxenv: py38
-
-          - name: Python 3.7
-            python-version: 3.7
-            os: ubuntu-latest
-            script: |
-              python -m pip install --upgrade pip
-              python -m pip install .[tests]
-              python -m pip install sphinx
-            toxenv: py37
-
-          - name: Python 3.6
-            python-version: 3.6
-            os: ubuntu-latest
-            script: |
-              python -m pip install --upgrade pip
-              python -m pip install .[tests]
-              python -m pip install sphinx
-            toxenv: py36
+            toxenv: py39
 
     steps:
       - name: Checkout code
@@ -71,3 +43,29 @@ jobs:
           python -m pip install tox
       - name: Run tox
         run: tox -e ${{ matrix.toxenv }}
+
+  code_coverage:
+    name: Code Coverage Report
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -e .[test]
+        python -m pip install sphinx
+        python -m pip install pytest-cov
+        python -m pip install tox
+    - name: Run tox
+      run: |
+        tox -e coverage
+    - name: Upload coverage to codecoverage
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unit
