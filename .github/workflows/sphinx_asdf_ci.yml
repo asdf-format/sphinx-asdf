@@ -1,4 +1,4 @@
-name: Sphinx ASDF CI
+name: CI
 
 on:
   push:
