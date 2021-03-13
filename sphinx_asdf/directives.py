@@ -439,7 +439,7 @@ class AsdfSchema(SphinxDirective):
 
         prop = schema_property(id=path)
         prop.append(schema_property_name(text=name))
-        prop.append(schema_property_details(typ, required, ref))
+        prop.append(schema_property_details(typ=typ, required=required, ref=ref))
         prop.append(self._parse_description(description, ''))
         if typ != 'object':
             prop.extend(self._process_validation_keywords(tree, typename=typ, path=path))
