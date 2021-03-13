@@ -1,5 +1,6 @@
 import posixpath
 from pprint import pformat
+from pathlib import Path
 
 import yaml
 
@@ -18,12 +19,22 @@ from .nodes import (toc_link, schema_doc, schema_header_title, schema_title,
                     schema_combiner_body, schema_combiner_list,
                     schema_combiner_item, section_header, asdf_tree, asdf_ref,
                     example_section, example_item, example_description)
+from .weldx_tools import make_wx_node
 
 
 SCHEMA_DEF_SECTION_TITLE = 'Schema Definitions'
 EXAMPLE_SECTION_TITLE = 'Examples'
 INTERNAL_DEFINITIONS_SECTION_TITLE = 'Internal Definitions'
 ORIGINAL_SCHEMA_SECTION_TITLE = 'Original Schema'
+
+
+def _expand_name_glob(app, name, standard_prefix):
+    schema_file = Path(
+        app.srcdir) / app.config.asdf_schema_path / standard_prefix / name
+    schema_files = [Path(p) for p in
+                    Path(schema_file.parent).glob(schema_file.name)]
+    expandend_list = [Path(name).parent / f.stem for f in schema_files]
+    return expandend_list
 
 
 class schema_def(nodes.comment):
@@ -45,14 +56,20 @@ class AsdfAutoschemas(SphinxDirective):
     }
 
     def _process_asdf_toctree(self, standard_prefix):
-
         links = []
         for name in self.content:
             if not name:
                 continue
-            schema = self.env.path2doc(name.strip() + '.rst')
-            link = posixpath.join('generated', standard_prefix, schema)
-            links.append((schema, link))
+
+            if "*" in name:
+                deglobbed_list = _expand_name_glob(self.env.app, name, standard_prefix)
+                name_list = [name.as_posix() for name in deglobbed_list]
+            else:
+                name_list = [name]
+            for name in name_list:
+                schema = self.env.path2doc(name.strip() + '.rst')
+                link = posixpath.join('generated', standard_prefix, schema)
+                links.append((schema, link))
 
         tocnode = addnodes.toctree()
         tocnode['includefiles'] = [x[1] for x in links]
@@ -143,6 +160,14 @@ class AsdfSchema(SphinxDirective):
                                                            name in required,
                                                            path=path))
 
+        if 'wx_unit' in schema:
+            wx_node = make_wx_node(schema, 'wx_unit')
+            docnodes.append(wx_node)
+
+        if 'wx_shape' in schema:
+            wx_node = make_wx_node(schema, 'wx_shape', default_flow_style=None)
+            docnodes.append(wx_node)
+
         docnodes.append(section_header(text=ORIGINAL_SCHEMA_SECTION_TITLE))
         docnodes.append(nodes.literal_block(text=raw_content, language='yaml'))
 
@@ -232,7 +257,7 @@ class AsdfSchema(SphinxDirective):
 
     def _create_array_items_node(self, items, path):
         path = self._append_to_path(path, 'items')
-        for combiner in ['anyOf', 'allOf']:
+        for combiner in ['anyOf', 'allOf', 'oneOf']:
             if combiner in items:
                 return self._create_combiner(items, combiner, array=True,
                                              path=path)
@@ -316,6 +341,14 @@ class AsdfSchema(SphinxDirective):
                                                         language='none'))
                 node_list.append(default_node)
 
+        if 'wx_unit' in schema:
+            wx_node = make_wx_node(schema, 'wx_unit')
+            node_list.append(wx_node)
+
+        if 'wx_shape' in schema:
+            wx_node = make_wx_node(schema, 'wx_shape', default_flow_style=None)
+            node_list.append(wx_node)
+
         return node_list
 
     def _process_top_type(self, schema, path=''):
@@ -334,7 +367,7 @@ class AsdfSchema(SphinxDirective):
             return '{}-{}'.format(path, new).lower()
 
     def _process_properties(self, schema, top=False, path=''):
-        for combiner in ['anyOf', 'allOf']:
+        for combiner in ['anyOf', 'allOf', 'oneOf']:
             if combiner in schema:
                 return self._create_combiner(schema, combiner, top=top,
                                              path=path)
@@ -354,6 +387,9 @@ class AsdfSchema(SphinxDirective):
             return schema_properties(None, details, id=path)
         elif '$ref' in schema:
             ref = self._create_ref_node(schema['$ref'])
+            return schema_properties(None, *[ref], id=path)
+        elif 'tag' in schema:
+            ref = self._create_ref_node(schema['tag'])
             return schema_properties(None, *[ref], id=path)
         else:
             text = nodes.emphasis(text='This node has no type definition (unrestricted)')
@@ -392,13 +428,18 @@ class AsdfSchema(SphinxDirective):
 
         if '$ref' in tree:
             typ, ref = self._create_reference(tree.get('$ref'), shorten=True)
+        elif 'tag' in tree:
+            _tag = tree.get('tag')
+            typ, ref = self._create_reference(_tag, shorten=True)
+            if '*' in _tag:
+                ref = None
         else:
             typ = tree.get('type', 'object')
             ref = None
 
         prop = schema_property(id=path)
         prop.append(schema_property_name(text=name))
-        prop.append(schema_property_details(typ, required, ref))
+        prop.append(schema_property_details(typ=typ, required=required, ref=ref))
         prop.append(self._parse_description(description, ''))
         if typ != 'object':
             prop.extend(self._process_validation_keywords(tree, typename=typ, path=path))
