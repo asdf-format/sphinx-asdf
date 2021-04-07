@@ -34,21 +34,21 @@ def test_basic_generation(app, status, warning):
     assert ('.. asdf-schema::\n'
             '    :schema_root: schemas\n'
             '\n'
-            '    foo\n') in foo_doc.text()
+            '    foo\n') in foo_doc.read_text()
 
     bar_doc = (app.srcdir / 'generated' / 'bar.rst')
     assert bar_doc.exists()
     assert ('.. asdf-schema::\n'
             '    :schema_root: schemas\n'
             '\n'
-            '    bar\n') in bar_doc.text()
+            '    bar\n') in bar_doc.read_text()
 
     baz_doc = (app.srcdir / 'generated' / 'core' / 'baz.rst')
     assert baz_doc.exists()
     assert ('.. asdf-schema::\n'
             '    :schema_root: schemas\n'
             '\n'
-            '    core/baz\n') in baz_doc.text()
+            '    core/baz\n') in baz_doc.read_text()
 
 
 @pytest.mark.sphinx('dummy', testroot='global-config')
@@ -60,21 +60,21 @@ def test_generation_global_config(app, status, warning):
     assert ('.. asdf-schema::\n'
             '    :schema_root: a/b/c/schemas\n'
             '\n'
-            '    foo\n') in foo_doc.text()
+            '    foo\n') in foo_doc.read_text()
 
     bar_doc = (app.srcdir / 'generated' / 'bar.rst')
     assert bar_doc.exists()
     assert ('.. asdf-schema::\n'
             '    :schema_root: a/b/c/schemas\n'
             '\n'
-            '    bar\n') in bar_doc.text()
+            '    bar\n') in bar_doc.read_text()
 
     baz_doc = (app.srcdir / 'generated' / 'core' / 'baz.rst')
     assert baz_doc.exists()
     assert ('.. asdf-schema::\n'
             '    :schema_root: a/b/c/schemas\n'
             '\n'
-            '    core/baz\n') in baz_doc.text()
+            '    core/baz\n') in baz_doc.read_text()
 
 
 @pytest.mark.sphinx('dummy', testroot='global-prefix')
@@ -87,7 +87,7 @@ def test_generation_global_prefix(app, status, warning):
             '    :standard_prefix: a/b/c\n'
             '    :schema_root: schemas\n'
             '\n'
-            '    foo\n') in foo_doc.text()
+            '    foo\n') in foo_doc.read_text()
 
     bar_doc = (app.srcdir / 'generated' / 'a' / 'b' / 'c' / 'bar.rst')
     assert bar_doc.exists()
@@ -95,7 +95,7 @@ def test_generation_global_prefix(app, status, warning):
             '    :standard_prefix: a/b/c\n'
             '    :schema_root: schemas\n'
             '\n'
-            '    bar\n') in bar_doc.text()
+            '    bar\n') in bar_doc.read_text()
 
     baz_doc = (app.srcdir / 'generated' / 'a' / 'b' / 'c' / 'core' / 'baz.rst')
     assert baz_doc.exists()
@@ -103,7 +103,7 @@ def test_generation_global_prefix(app, status, warning):
             '    :standard_prefix: a/b/c\n'
             '    :schema_root: schemas\n'
             '\n'
-            '    core/baz\n') in baz_doc.text()
+            '    core/baz\n') in baz_doc.read_text()
 
 
 @pytest.mark.sphinx('dummy', testroot='basic-generation')
@@ -113,10 +113,10 @@ def test_basic_build(app, status, warning):
     # Test each of the generated schema documents
     for name in ['foo', 'bar', 'core/baz']:
         doctree_path = app.doctreedir / 'generated' / '{}.doctree'.format(name)
-        doc = pickle.loads(doctree_path.bytes())
+        doc = pickle.loads(doctree_path.read_bytes())
 
-        title = doc.traverse(nodes.title)[0]
+        title = list(doc.traverse(nodes.title))[0]
         assert title.astext() == name
 
-        schema_top = doc.traverse(sa_nodes.schema_doc)
+        schema_top = list(doc.traverse(sa_nodes.schema_doc))
         assert len(schema_top) > 0

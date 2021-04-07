@@ -67,12 +67,8 @@ class section_header(nodes.line):
 
 class schema_properties(nodes.compound):
 
-    def __init__(self, *args, **kwargs):
-        self.id = kwargs.pop('id', '')
-        super().__init__(*args, **kwargs)
-
     def visit_html(self, node):
-        self.body.append(r'<div class="schema_properties" id="{}">'.format(node.id))
+        self.body.append(r'<div class="schema_properties" id="{}">'.format(node.get('id')))
 
     def depart_html(self, node):
         self.body.append(r'</div>')
@@ -80,12 +76,8 @@ class schema_properties(nodes.compound):
 
 class schema_property(nodes.compound):
 
-    def __init__(self, *args, **kwargs):
-        self.id = kwargs.pop('id', '')
-        super().__init__(*args, **kwargs)
-
     def visit_html(self, node):
-        self.body.append(r'<li class="list-group-item" id="{}">'.format(node.id))
+        self.body.append(r'<li class="list-group-item" id="{}">'.format(node.get('id')))
 
     def depart_html(self, node):
         self.body.append(r'</li>')
@@ -102,21 +94,15 @@ class schema_property_name(nodes.line):
 
 class schema_property_details(nodes.compound):
 
-    def __init__(self, typ, required, ref=None, *args, **kwargs):
-        self.typ = typ
-        self.ref = ref
-        self.required = required
-        super().__init__(*args, **kwargs)
-
     def visit_html(self, node):
         self.body.append(r'<table><tr>')
         self.body.append('<td><b>')
-        if node.ref is not None:
-            self.body.append('<a href={}>{}</a>'.format(node.ref, node.typ))
+        if node.get('ref', None) is not None:
+            self.body.append('<a href={}>{}</a>'.format(node.get('ref'), node.get('typ')))
         else:
-            self.body.append(node.typ)
+            self.body.append(node.get('typ'))
         self.body.append('</b></td>')
-        if node.required:
+        if node.get('required'):
             self.body.append(r'<td><em>Required</em></td>')
 
     def depart_html(self, node):
@@ -134,13 +120,8 @@ class asdf_tree(nodes.bullet_list):
 
 class asdf_ref(nodes.line):
 
-    def __init__(self, *args, **kwargs):
-        self.text = kwargs['text']
-        self.href = kwargs.pop('href')
-        super().__init__(*args, **kwargs)
-
     def visit_html(self, node):
-        self.body.append('<a class="asdf_ref" href="{}">'.format(node.href))
+        self.body.append('<a class="asdf_ref" href="{}">'.format(node.get('href')))
 
     def depart_html(self, node):
         self.body.append(r'</a>')
@@ -174,17 +155,13 @@ class example_description(nodes.compound):
 
 class schema_combiner_body(nodes.compound):
 
-    def __init__(self, *args, path='', **kwargs):
-        self.path = path
-        super().__init__(*args, **kwargs)
-
     def visit_html(self, node):
         self.body.append("""
 <button class="btn btn-primary" data-toggle="collapse" href="#{0}" aria-expanded="false">
     <span class="hidden">Hide </span>Details
 </button>
 <div class="collapse" id="{0}">
-        """.format(node.path))
+        """.format(node.get('path')))
 
     def depart_html(self, node):
         self.body.append('</div>')
