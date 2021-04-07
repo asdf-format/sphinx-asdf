@@ -27,4 +27,7 @@ def setup(app):
     app.connect('doctree-read', add_labels_to_nodes)
     app.connect('build-finished', on_build_finished)
 
-    return dict(version='0.1')
+    return dict(version='0.1.1',
+                parallel_read_safe=True,
+                parallel_write_safe=True
+                )
