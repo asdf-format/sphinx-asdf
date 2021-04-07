@@ -232,7 +232,7 @@ class AsdfSchema(SphinxDirective):
 
     def _create_array_items_node(self, items, path):
         path = self._append_to_path(path, 'items')
-        for combiner in ['anyOf', 'allOf']:
+        for combiner in ['anyOf', 'allOf', 'oneOf']:
             if combiner in items:
                 return self._create_combiner(items, combiner, array=True,
                                              path=path)
@@ -334,7 +334,7 @@ class AsdfSchema(SphinxDirective):
             return '{}-{}'.format(path, new).lower()
 
     def _process_properties(self, schema, top=False, path=''):
-        for combiner in ['anyOf', 'allOf']:
+        for combiner in ['anyOf', 'allOf', 'oneOf']:
             if combiner in schema:
                 return self._create_combiner(schema, combiner, top=top,
                                              path=path)
