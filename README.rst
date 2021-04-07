@@ -1,6 +1,10 @@
 sphinx-asdf
 ===========
 
+.. image:: https://github.com/asdf-format/sphinx-asdf/workflows/CI/badge.svg
+    :target: https://github.com/asdf-format/sphinx-asdf/actions
+    :alt: CI Status
+
 ``sphinx-asdf`` is a plugin for `sphinx`_ that enables generation of
 documentation from `ASDF`_ schemas.
 
