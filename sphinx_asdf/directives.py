@@ -1,5 +1,6 @@
 import posixpath
 from pprint import pformat
+from pathlib import Path
 
 import yaml
 
@@ -26,6 +27,15 @@ INTERNAL_DEFINITIONS_SECTION_TITLE = 'Internal Definitions'
 ORIGINAL_SCHEMA_SECTION_TITLE = 'Original Schema'
 
 
+def _expand_name_glob(app, name, standard_prefix):
+    schema_file = Path(
+        app.srcdir) / app.config.asdf_schema_path / standard_prefix / name
+    schema_files = [Path(p) for p in
+                    Path(schema_file.parent).glob(schema_file.name)]
+    expandend_list = [Path(name).parent / f.stem for f in schema_files]
+    return expandend_list
+
+
 class schema_def(nodes.comment):
 
     def __init__(self, *args, **kwargs):
@@ -45,14 +55,20 @@ class AsdfAutoschemas(SphinxDirective):
     }
 
     def _process_asdf_toctree(self, standard_prefix):
-
         links = []
         for name in self.content:
             if not name:
                 continue
-            schema = self.env.path2doc(name.strip() + '.rst')
-            link = posixpath.join('generated', standard_prefix, schema)
-            links.append((schema, link))
+
+            if "*" in name:
+                deglobbed_list = _expand_name_glob(self.env.app, name, standard_prefix)
+                name_list = [name.as_posix() for name in deglobbed_list]
+            else:
+                name_list = [name]
+            for name in name_list:
+                schema = self.env.path2doc(name.strip() + '.rst')
+                link = posixpath.join('generated', standard_prefix, schema)
+                links.append((schema, link))
 
         tocnode = addnodes.toctree()
         tocnode['includefiles'] = [x[1] for x in links]

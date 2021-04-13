@@ -10,14 +10,15 @@ from sphinx.util.fileutil import copy_asset
 from sphinx.util.docutils import sphinx_domains
 
 from .nodes import schema_doc
-from .directives import schema_def
+from .directives import schema_def, _expand_name_glob
+
+from pathlib import Path
 
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 
 
 def find_autoasdf_directives(env, filename):
-
     docname = env.path2doc(filename)
     env.prepare_settings(docname)
     with sphinx_domains(env), rst.default_role(docname, env.config.default_role):
@@ -60,21 +61,30 @@ def create_schema_docs(app, schemas):
         standard_prefix = (schema.standard_prefix or
                            app.env.config.asdf_schema_standard_prefix)
         output_dir = posixpath.join(app.srcdir, 'generated', standard_prefix)
-        doc_path = posixpath.join(output_dir, schema_name + '.rst')
 
-        if posixpath.exists(doc_path):
-            continue
+        if "*" in schema_name:
+            expanded_list = _expand_name_glob(app, schema_name, standard_prefix)
+            doc_path_list = [Path(output_dir) / f for f in expanded_list]
+        else:
+            doc_path_list = [Path(output_dir) / schema_name]
 
-        os.makedirs(posixpath.dirname(doc_path), exist_ok=True)
+        for f_path in doc_path_list:
+            doc_path = f_path.as_posix() + '.rst'
+            schema_entry = (Path(schema_name).parent / f_path.name).as_posix()
 
-        with open(doc_path, 'w') as ff:
-            ff.write(schema_name + '\n')
-            ff.write('=' * len(schema_name) + '\n\n')
-            ff.write('.. asdf-schema::\n')
-            if standard_prefix:
-                ff.write('    :standard_prefix: {}\n'.format(standard_prefix))
-            ff.write('    :schema_root: {}\n\n'.format(schema.schema_root))
-            ff.write('    {}\n'.format(schema_name))
+            if posixpath.exists(doc_path):
+                continue
+
+            os.makedirs(posixpath.dirname(doc_path), exist_ok=True)
+
+            with open(doc_path, 'w') as ff:
+                ff.write(schema_entry + '\n')
+                ff.write('=' * len(schema_entry) + '\n\n')
+                ff.write('.. asdf-schema::\n')
+                if standard_prefix:
+                    ff.write('    :standard_prefix: {}\n'.format(standard_prefix))
+                ff.write('    :schema_root: {}\n\n'.format(schema.schema_root))
+                ff.write('    {}\n'.format(schema_entry))
 
 
 def autogenerate_schema_docs(app):
