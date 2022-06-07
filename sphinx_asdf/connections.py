@@ -68,6 +68,7 @@ def create_schema_docs(app, schemas):
         os.makedirs(posixpath.dirname(doc_path), exist_ok=True)
 
         with open(doc_path, 'w') as ff:
+            ff.write(f".. _{standard_prefix}/{schema_name}:\n\n")
             ff.write(schema_name + '\n')
             ff.write('=' * len(schema_name) + '\n\n')
             ff.write('.. asdf-schema::\n')
