@@ -30,6 +30,11 @@ def setup(app):
     app.connect('doctree-read', add_labels_to_nodes)
     app.connect('build-finished', on_build_finished)
 
+    app.config._raw_config.setdefault('html_static_path', []).append(
+        os.path.join(os.path.dirname(__file__), 'static')
+    )
+    app.add_css_file("custom.css")
+
     return dict(version='0.1.1',
                 parallel_read_safe=True,
                 parallel_write_safe=True
