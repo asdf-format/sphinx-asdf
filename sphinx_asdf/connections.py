@@ -17,6 +17,8 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 
 
 def find_autoasdf_directives(env, filename):
+    if filename.endswith(".md"):
+        return []
 
     docname = env.path2doc(filename)
     env.prepare_settings(docname)
