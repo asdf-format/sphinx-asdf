@@ -32,7 +32,7 @@ rst_epilog += """
 html_theme = "sphinx_rtd_theme"
 html_theme_options = {}
 
-static_dir = os.path.join(os.path.dirname(__file__), 'static')
+static_dir = os.path.join(os.path.dirname(__file__), "static")
 html_logo = f"{static_dir}/logo.png"
 html_favicon = f"{static_dir}/logo.ico"
 latex_logo = f"{static_dir}/logo.pdf"

@@ -4,13 +4,12 @@ import os
 import tempfile
 import textwrap
 
-from docutils import nodes
-from docutils.parsers.rst import Directive
-from sphinx.util.nodes import set_source_info
-
 import asdf
 from asdf import AsdfFile, versioning
 from asdf.constants import ASDF_MAGIC, BLOCK_FLAG_STREAMED
+from docutils import nodes
+from docutils.parsers.rst import Directive
+from sphinx.util.nodes import set_source_info
 
 version_string = str(versioning.default_version)
 TMPDIR = tempfile.mkdtemp()
@@ -64,9 +63,7 @@ class AsdfDirective(Directive):
         try:
             ff = AsdfFile()
             code = AsdfFile._open_impl(ff, filename, _get_yaml_content=True)
-            code = "\n{0} {1}\n".format(ASDF_MAGIC.strip().decode("utf-8"), version_string) + code.strip().decode(
-                "utf-8"
-            )
+            code = "\n{} {}\n".format(ASDF_MAGIC.strip().decode("utf-8"), version_string) + code.strip().decode("utf-8")
             code += "\n"
             literal = nodes.literal_block(code, code)
             literal["language"] = "yaml"
@@ -84,7 +81,7 @@ class AsdfDirective(Directive):
                     for i, block in enumerate(ff.blocks.internal_blocks):
                         data = codecs.encode(block.data.tobytes(), "hex")
                         if len(data) > 40:
-                            data = data[:40] + "...".encode()
+                            data = data[:40] + b"..."
                         allocated = block._allocated
                         size = block._size
                         data_size = block._data_size
@@ -94,20 +91,20 @@ class AsdfDirective(Directive):
                             allocated = size = data_size = 0
 
                         lines = []
-                        lines.append("BLOCK {0}:".format(i))
+                        lines.append(f"BLOCK {i}:")
 
                         human_flags = []
                         for key, val in FLAGS.items():
                             if flags & key:
                                 human_flags.append(val)
                         if len(human_flags):
-                            lines.append("    flags: {0}".format(" | ".join(human_flags)))
+                            lines.append("    flags: {}".format(" | ".join(human_flags)))
                         if block.input_compression:
-                            lines.append("    compression: {0}".format(block.input_compression))
-                        lines.append("    allocated_size: {0}".format(allocated))
-                        lines.append("    used_size: {0}".format(size))
-                        lines.append("    data_size: {0}".format(data_size))
-                        lines.append("    data: {0}".format(data))
+                            lines.append(f"    compression: {block.input_compression}")
+                        lines.append(f"    allocated_size: {allocated}")
+                        lines.append(f"    used_size: {size}")
+                        lines.append(f"    data_size: {data_size}")
+                        lines.append(f"    data: {data}")
 
                         code = "\n".join(lines)
                         code += "\n"
