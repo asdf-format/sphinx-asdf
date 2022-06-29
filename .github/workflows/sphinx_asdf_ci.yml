@@ -56,6 +56,31 @@ jobs:
             os: ubuntu-latest
             toxenv: asdf-standard
 
+          - name: ASDF Document Build
+            python-version: "3.9"
+            os: ubuntu-latest
+            toxenv: asdf
+
+          - name: ASDF-transform-schemas Document Build
+            python-version: "3.9"
+            os: ubuntu-latest
+            toxenv: asdf-transform-schemas
+
+          - name: ASDF-coordinates-schemas Document Build
+            python-version: "3.9"
+            os: ubuntu-latest
+            toxenv: asdf-coordinates-schemas
+
+          - name: ASDF-wcs-schemas Document Build
+            python-version: "3.9"
+            os: ubuntu-latest
+            toxenv: asdf-wcs-schemas
+
+          - name: ASDF-astropy Document Build
+            python-version: "3.9"
+            os: ubuntu-latest
+            toxenv: asdf-astropy
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

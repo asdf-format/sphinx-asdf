@@ -35,9 +35,6 @@ def setup(app):
     app.config._raw_config.setdefault('html_static_path', []).append(static_dir)
     app.add_css_file("custom.css")
 
-    app.config._raw_config.setdefault("html_logo", f"{static_dir}/logo.png")
-    app.config._raw_config.setdefault("html_favicon", f"{static_dir}/logo.ico")
-
     return dict(version='0.1.1',
                 parallel_read_safe=True,
                 parallel_write_safe=True
