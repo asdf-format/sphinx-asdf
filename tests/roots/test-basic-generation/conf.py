@@ -1,1 +1,1 @@
-extensions = ['sphinx_asdf']
+extensions = ["sphinx_asdf"]
