@@ -1,14 +1,12 @@
 import datetime
 import os
 import sys
-from pathlib import Path
 
-import numpy
-import toml
+import numpy as np
 
 # Ensure documentation examples are determinstically random.
 try:
-    numpy.random.seed(int(os.environ["SOURCE_DATE_EPOCH"]))
+    np.random.seed(int(os.environ["SOURCE_DATE_EPOCH"]))
 except KeyError:
     pass
 
