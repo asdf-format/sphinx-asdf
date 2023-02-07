@@ -15,7 +15,6 @@ from .nodes import add_asdf_nodes
 
 
 def setup(app):
-
     # Describes a path relative to the sphinx source directory
     app.add_config_value("asdf_schema_path", "schemas", "env")
     app.add_config_value("asdf_schema_standard_prefix", "", "env")

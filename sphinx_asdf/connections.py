@@ -28,7 +28,6 @@ def find_autoasdf_directives(env, filename):
 
 
 def find_autoschema_references(app, genfiles):
-
     # We set this environment variable to indicate that the AsdfSchemas
     # directive should be parsed as a simple list of schema references
     # rather than as the toctree that will be generated when the documentation
@@ -55,7 +54,6 @@ def find_autoschema_references(app, genfiles):
 
 
 def create_schema_docs(app, schemas):
-
     for schema in schemas:
         schema_name = schema.children[0].astext()
         standard_prefix = schema.standard_prefix or app.env.config.asdf_schema_standard_prefix
@@ -79,7 +77,6 @@ def create_schema_docs(app, schemas):
 
 
 def autogenerate_schema_docs(app):
-
     env = app.env
 
     genfiles = [env.doc2path(x, base=None) for x in env.found_docs if posixpath.isfile(env.doc2path(x))]

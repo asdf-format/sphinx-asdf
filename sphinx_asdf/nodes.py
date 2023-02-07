@@ -200,6 +200,5 @@ __all__ = [klass.__name__ for klass in custom_nodes] + ["add_asdf_nodes"]
 
 
 def add_asdf_nodes(app):
-
     for node in custom_nodes:
         app.add_node(node, html=(node.visit_html, node.depart_html))
