@@ -37,6 +37,5 @@ def setup(app):
     static_dir = os.path.join(os.path.dirname(__file__), "static")
 
     app.config._raw_config.setdefault("html_static_path", []).append(static_dir)
-    app.add_css_file("custom.css")
 
     return dict(version="0.1.1", parallel_read_safe=True, parallel_write_safe=True)
