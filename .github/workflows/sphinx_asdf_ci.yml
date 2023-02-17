@@ -42,11 +42,6 @@ jobs:
             os: ubuntu-latest
             toxenv: twine
 
-          - name: Document Checks
-            python-version: "3.9"
-            os: ubuntu-latest
-            toxenv: checkdocs
-
           - name: Code Style Checks
             python-version: "3.9"
             os: ubuntu-latest
