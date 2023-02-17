@@ -45,7 +45,6 @@ class schema_def(nodes.comment):
 
 
 class AsdfAutoschemas(SphinxDirective):
-
     required_arguments = 0
     optional_arguments = 2
     has_content = True
@@ -55,7 +54,6 @@ class AsdfAutoschemas(SphinxDirective):
     }
 
     def _process_asdf_toctree(self, standard_prefix):
-
         links = []
         for name in self.content:
             if not name:
@@ -73,7 +71,6 @@ class AsdfAutoschemas(SphinxDirective):
         return [tocnode]
 
     def run(self):
-
         standard_prefix = self.options.get("standard_prefix", self.env.config.asdf_schema_standard_prefix)
 
         # This is the case when we are actually using Sphinx to generate
@@ -94,7 +91,6 @@ class AsdfAutoschemas(SphinxDirective):
 
 
 class AsdfSchema(SphinxDirective):
-
     has_content = True
     optional_arguments = 2
     option_spec = {
@@ -103,7 +99,6 @@ class AsdfSchema(SphinxDirective):
     }
 
     def run(self):
-
         self.envconfig = self.state.document.settings.env.config
         self.schema_name = self.content[0]
         schema_dir = self.options.get("schema_root", self.envconfig.asdf_schema_path)
@@ -199,7 +194,6 @@ class AsdfSchema(SphinxDirective):
         return schema_id
 
     def _create_reference(self, refname, shorten=False):
-
         if "#" in refname:
             schema_id, fragment = refname.split("#")
         else:
@@ -381,7 +375,6 @@ class AsdfSchema(SphinxDirective):
         return schema_properties(None, *[container_node], id=path)
 
     def _create_property_node(self, name, tree, required, path=""):
-
         description = tree.get("description", "")
 
         if "$ref" in tree:
