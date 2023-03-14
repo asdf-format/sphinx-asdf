@@ -15,7 +15,7 @@ To install the latest release on PyPI::
 
     $ pip install sphinx-asdf
 
-The latest development version is available from the ``master`` branch `on
+The latest development version is available from the ``main`` branch `on
 github`_. To clone the project:
 
 ::
