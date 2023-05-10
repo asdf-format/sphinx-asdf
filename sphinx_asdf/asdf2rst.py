@@ -91,7 +91,7 @@ class AsdfDirective(Directive):
 
             if show_bocks:
                 with asdf.open(filename, **kwargs) as ff:
-                    for i, block in enumerate(ff.blocks.internal_blocks):
+                    for i, block in enumerate(ff._blocks.internal_blocks):
                         data = codecs.encode(block.data.tobytes(), "hex")
                         if len(data) > 40:
                             data = data[:40] + b"..."
@@ -127,10 +127,10 @@ class AsdfDirective(Directive):
                         set_source_info(self, literal)
                         parts.append(literal)
 
-                    internal_blocks = list(ff.blocks.internal_blocks)
+                    internal_blocks = list(ff._blocks.internal_blocks)
                     if len(internal_blocks) and internal_blocks[-1].array_storage != "streamed":
                         buff = io.BytesIO()
-                        ff.blocks.write_block_index(buff, ff)
+                        ff._blocks.write_block_index(buff, ff)
                         block_index = buff.getvalue().decode("utf-8")
                         literal = nodes.literal_block(block_index, block_index)
                         literal["language"] = "yaml"

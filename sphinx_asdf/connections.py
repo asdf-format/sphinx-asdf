@@ -3,8 +3,8 @@ import os
 import posixpath
 import warnings
 
+import sphinx.builders
 from docutils import nodes
-from sphinx.io import read_doc
 from sphinx.util import rst
 from sphinx.util.docutils import sphinx_domains
 from sphinx.util.fileutil import copy_asset
@@ -22,9 +22,11 @@ def find_autoasdf_directives(env, filename):
     docname = env.path2doc(filename)
     env.prepare_settings(docname)
     with sphinx_domains(env), rst.default_role(docname, env.config.default_role):
-        doctree = read_doc(env.app, env, env.doc2path(docname))
+        builder = sphinx.builders.text.TextBuilder(env.app, env)
+        builder.read_doc(docname)
+        doctree = env.get_and_resolve_doctree(docname, builder)
 
-    return doctree.traverse(schema_def)
+    return doctree.findall(schema_def)
 
 
 def find_autoschema_references(app, genfiles):
@@ -103,7 +105,7 @@ def update_app_config(app, config):
 def handle_page_context(app, pagename, templatename, ctx, doctree):
     # Use custom template when rendering pages containing schema documentation.
     # This allows us to selectively include bootstrap
-    if doctree is not None and doctree.traverse(schema_doc):
+    if doctree is not None and doctree.findall(schema_doc):
         return os.path.join(TEMPLATE_PATH, "schema.html")
 
 
@@ -118,7 +120,7 @@ def add_labels_to_nodes(app, document):
     anonlabels = app.env.domaindata["std"]["anonlabels"]
     basepath = os.path.join("generated", app.env.config.asdf_schema_standard_prefix)
 
-    for node in document.traverse():
+    for node in document.findall():
         if isinstance(node, str) or not (isinstance(node, nodes.Node) and node["ids"]):
             continue
 
