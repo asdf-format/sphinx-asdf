@@ -92,8 +92,8 @@ def test_basic_build(app, status, warning):
         doctree_path = app.doctreedir / "generated" / f"{name}.doctree"
         doc = pickle.loads(doctree_path.read_bytes())
 
-        title = list(doc.traverse(nodes.title))[0]
+        title = list(doc.findall(nodes.title))[0]
         assert title.astext() == name
 
-        schema_top = list(doc.traverse(sa_nodes.schema_doc))
+        schema_top = list(doc.findall(sa_nodes.schema_doc))
         assert len(schema_top) > 0
