@@ -45,6 +45,7 @@ class RunCodeDirective(Directive):
         else:
             return []
 
+
 def _block_to_string(block):
     if hasattr(block, "header"):
         header = block.header
@@ -75,7 +76,7 @@ def _block_to_string(block):
             human_flags.append(val)
     if len(human_flags):
         lines.append("    flags: {}".format(" | ".join(human_flags)))
-    if header["compression"] and header["compression"] != b'\0\0\0\0':
+    if header["compression"] and header["compression"] != b"\0\0\0\0":
         lines.append(f"    compression: {header['compression']}")
     lines.append(f"    allocated_size: {header['allocated_size']}")
     lines.append(f"    used_size: {header['used_size']}")
@@ -134,7 +135,7 @@ class AsdfDirective(Directive):
 
             if show_bocks:
                 with asdf.open(filename, **kwargs) as ff:
-                    if hasattr(ff._blocks, 'internal_blocks'):
+                    if hasattr(ff._blocks, "internal_blocks"):
                         blocks = list(ff._blocks.internal_blocks)
                     else:
                         blocks = ff._blocks.blocks
