@@ -1,15 +1,15 @@
 import posixpath
 from pprint import pformat
 
+import mistune
+import yaml
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.statemachine import ViewList
-import mistune
 from mistune.renderers.rst import RSTRenderer
 from sphinx import addnodes
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.nodes import nested_parse_with_titles
-import yaml
 
 from .nodes import (
     asdf_ref,
