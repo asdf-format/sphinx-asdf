@@ -46,7 +46,7 @@ class schema_def(nodes.comment):
 
 
 def _math_to_rst(renderer, txt, block_state):
-    return f':math:{txt}'
+    return f":math:{txt}"
 
 
 class AsdfAutoschemas(SphinxDirective):
@@ -167,7 +167,7 @@ class AsdfSchema(SphinxDirective):
         """
         rst = ViewList()
         renderer = RSTRenderer()
-        renderer.register('inline_math', _math_to_rst)
+        renderer.register("inline_math", _math_to_rst)
         md2rst = mistune.create_markdown(renderer=renderer, plugins=["math"])
         for i, line in enumerate(md2rst(text).split("\n")):
             rst.append(line, filename, i + 1)
