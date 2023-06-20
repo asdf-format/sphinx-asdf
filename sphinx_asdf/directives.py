@@ -1,15 +1,16 @@
 import posixpath
 from pprint import pformat
 
-import yaml
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.statemachine import ViewList
+import mistune
+from mistune.renderers.rst import RSTRenderer
 from sphinx import addnodes
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.nodes import nested_parse_with_titles
+import yaml
 
-from .md2rst import md2rst
 from .nodes import (
     asdf_ref,
     asdf_tree,
@@ -161,6 +162,7 @@ class AsdfSchema(SphinxDirective):
         by Michael Droetboom.
         """
         rst = ViewList()
+        md2rst = mistune.create_markdown(renderer=RSTRenderer(), plugins=["math"])
         for i, line in enumerate(md2rst(text).split("\n")):
             rst.append(line, filename, i + 1)
 
