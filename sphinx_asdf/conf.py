@@ -38,4 +38,4 @@ html_favicon = f"{static_dir}/logo.ico"
 latex_logo = f"{static_dir}/logo.pdf"
 
 sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname("__file__")), "sphinxext"))
-extensions += ["sphinx_asdf", "sphinx_inline_tabs", "myst_parser"]
+extensions += ["sphinx_asdf"]
