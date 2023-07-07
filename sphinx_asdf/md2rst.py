@@ -41,6 +41,6 @@ def md2rst(content):
     converter = mistune.create_markdown(renderer=renderer)
     INLINE_MATH_PATTERN = r"\$\$?(?!\s)(?P<math_text>.+?)(?!\s)(?<!\\)\$\$?"
     converter.inline.register("inline_math", INLINE_MATH_PATTERN, parse_inline_math, before="link")
-    BLOCK_MATH_PATTERN = r"(?s)\$\$(?P<math_text>.*?)\$\$"
+    BLOCK_MATH_PATTERN = r"\$\$(?P<math_text>[\w\W]*?)\$\$"
     converter.block.register("block_math", BLOCK_MATH_PATTERN, parse_block_math, before="list")
     return converter(content)
