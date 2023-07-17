@@ -87,22 +87,22 @@ jobs:
             toxenv: rad
 
           - name: roman_datamodels Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: roman_datamodels
 
           - name: romancal Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: romancal
 
           - name: stdatamodels Document Build
-            python-version: "3.9"
+            python-version: "3.10"
             os: ubuntu-latest
             toxenv: stdatamodels
 
           - name: jwst Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: jwst
 
