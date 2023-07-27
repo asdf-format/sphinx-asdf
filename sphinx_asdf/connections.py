@@ -3,8 +3,10 @@ import os
 import posixpath
 import warnings
 
-import sphinx.builders
+import docutils
 from docutils import nodes
+import packaging.version
+import sphinx.builders
 from sphinx.util import rst
 from sphinx.util.docutils import sphinx_domains
 from sphinx.util.fileutil import copy_asset
@@ -13,6 +15,19 @@ from .directives import schema_def
 from .nodes import schema_doc
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "templates")
+
+# docutils 0.19.0 fixed a bug in traverse/findall
+# https://sourceforge.net/p/docutils/bugs/448/
+# however sphinx-rtd-theme currently pins docutils to <0.19
+# docutils has since deprecated traverse so for packages that don't
+# use sphinx-rtd-theme (and will fetch 0.19.0) using findall will
+# avoid the deprecation warnings
+if packaging.version.parse(docutils.__version__) >= packaging.version.parse('0.19.0'):
+    def traverse(doctree, *args, **kwargs):
+        return doctree.findall(*args, **kwargs)
+else:
+    def traverse(doctree, *args, **kwargs):
+        return doctree.traverse(*args, **kwargs)
 
 
 def find_autoasdf_directives(env, filename):
@@ -26,7 +41,7 @@ def find_autoasdf_directives(env, filename):
         builder.read_doc(docname)
         doctree = env.get_and_resolve_doctree(docname, builder)
 
-    return doctree.findall(schema_def)
+    return traverse(doctree, schema_def)
 
 
 def find_autoschema_references(app, genfiles):
@@ -105,7 +120,7 @@ def update_app_config(app, config):
 def handle_page_context(app, pagename, templatename, ctx, doctree):
     # Use custom template when rendering pages containing schema documentation.
     # This allows us to selectively include bootstrap
-    if doctree is not None and doctree.findall(schema_doc):
+    if doctree is not None and traverse(doctree, schema_doc):
         return os.path.join(TEMPLATE_PATH, "schema.html")
 
 
@@ -120,7 +135,7 @@ def add_labels_to_nodes(app, document):
     anonlabels = app.env.domaindata["std"]["anonlabels"]
     basepath = os.path.join("generated", app.env.config.asdf_schema_standard_prefix)
 
-    for node in document.findall():
+    for node in traverse(document):
         if isinstance(node, str) or not (isinstance(node, nodes.Node) and node["ids"]):
             continue
 
