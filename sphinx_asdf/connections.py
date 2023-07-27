@@ -4,9 +4,9 @@ import posixpath
 import warnings
 
 import docutils
-from docutils import nodes
 import packaging.version
 import sphinx.builders
+from docutils import nodes
 from sphinx.util import rst
 from sphinx.util.docutils import sphinx_domains
 from sphinx.util.fileutil import copy_asset
@@ -22,10 +22,13 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "templates")
 # docutils has since deprecated traverse so for packages that don't
 # use sphinx-rtd-theme (and will fetch 0.19.0) using findall will
 # avoid the deprecation warnings
-if packaging.version.parse(docutils.__version__) >= packaging.version.parse('0.19.0'):
+if packaging.version.parse(docutils.__version__) >= packaging.version.parse("0.19.0"):
+
     def traverse(doctree, *args, **kwargs):
         return doctree.findall(*args, **kwargs)
+
 else:
+
     def traverse(doctree, *args, **kwargs):
         return doctree.traverse(*args, **kwargs)
 
