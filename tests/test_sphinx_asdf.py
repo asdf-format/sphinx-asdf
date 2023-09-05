@@ -1,17 +1,17 @@
 import os
 import pickle
+from pathlib import Path
 from tempfile import gettempdir
 
 import pytest
 from docutils import nodes
-from sphinx.testing.path import path
 
 from sphinx_asdf import nodes as sa_nodes
 
 
 @pytest.fixture(scope="session")
 def rootdir():
-    return path(__file__).parent.abspath() / "roots"
+    return Path(__file__).parent.absolute() / "roots"
 
 
 @pytest.fixture(scope="session")
@@ -23,7 +23,7 @@ def sphinx_test_tempdir():
     def make_tmpdir():
         return os.path.join(gettempdir(), str(os.getpid()))
 
-    return path(os.environ.get("SPHINX_TEST_TEMPDIR", make_tmpdir())).abspath()
+    return Path(os.environ.get("SPHINX_TEST_TEMPDIR", make_tmpdir())).absolute()
 
 
 @pytest.mark.sphinx("dummy", testroot="basic-generation")
