@@ -75,13 +75,14 @@ select = [
     #"E", # pycodestyle
     "F", # pyflakes, autoflake
     "I", # isort
-    #"S", # bandit
+    "S", # bandit
     #"UP", # pyupgrade
     #"RUF",  # ruff specific, includes yesqa
 ]
 extend-ignore = [
-    "F403",
-    "F405",
+    "F403", "F405",  # uses if import * should be removed
+    "S101",  # asserts used in tests
+    "S701",  # why is jinja being used?
 ]
 
 [tool.codespell]

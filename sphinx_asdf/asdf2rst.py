@@ -29,7 +29,7 @@ class RunCodeDirective(Directive):
 
         try:
             try:
-                exec(code, GLOBALS)
+                exec(code, GLOBALS)  # noqa: S102
             except Exception:
                 print(code)
                 raise
