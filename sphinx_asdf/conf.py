@@ -2,14 +2,6 @@ import datetime  # noqa: F401
 import os
 import sys
 
-import numpy
-
-# Ensure documentation examples are deterministically random.
-try:
-    numpy.random.seed(int(os.environ["SOURCE_DATE_EPOCH"]))
-except KeyError:
-    pass
-
 try:
     from sphinx_astropy.conf.v1 import *
 except ImportError:
