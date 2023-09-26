@@ -75,7 +75,7 @@ def _block_to_string(block):
         if header["flags"] & key:
             human_flags.append(val)
     if len(human_flags):
-        lines.append("    flags: {}".format(" | ".join(human_flags)))
+        lines.append(f"    flags: {' | '.join(human_flags)}")
     if header["compression"] and header["compression"] != b"\0\0\0\0":
         lines.append(f"    compression: {header['compression']}")
     lines.append(f"    allocated_size: {header['allocated_size']}")

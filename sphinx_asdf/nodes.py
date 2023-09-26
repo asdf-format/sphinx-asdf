@@ -90,7 +90,7 @@ class schema_property_details(nodes.compound):
         self.body.append(r"<table><tr>")
         self.body.append("<td><b>")
         if node.get("ref", None) is not None:
-            self.body.append("<a href={}>{}</a>".format(node.get("ref"), node.get("typ")))
+            self.body.append(f"<a href={node.get('ref')}>{node.get('typ')}</a>")
         else:
             self.body.append(node.get("typ"))
         self.body.append("</b></td>")
@@ -111,7 +111,7 @@ class asdf_tree(nodes.bullet_list):
 
 class asdf_ref(nodes.line):
     def visit_html(self, node):
-        self.body.append('<a class="asdf_ref" href="{}">'.format(node.get("href")))
+        self.body.append(f"<a class=\"asdf_ref\" href=\"{node.get('href')}\">")
 
     def depart_html(self, node):
         self.body.append(r"</a>")
