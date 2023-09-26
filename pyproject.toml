@@ -73,11 +73,15 @@ line-length = 120
 select = [
     # minimal set to match pre-ruff behavior
     #"E", # pycodestyle
-    #"F", # pyflakes, autoflake
+    "F", # pyflakes, autoflake
     "I", # isort
     #"S", # bandit
     #"UP", # pyupgrade
     #"RUF",  # ruff specific, includes yesqa
+]
+extend-ignore = [
+    "F403",
+    "F405",
 ]
 
 [tool.codespell]
