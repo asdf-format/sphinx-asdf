@@ -1,3 +1,47 @@
+[project]
+name = "sphinx-asdf"
+description = "Sphinx plugin for generating documentation from ASDF schemas"
+readme = 'README.rst'
+license = { file = 'LICENSE' }
+authors = [{ name = 'The ASDF Developers', email = 'help@stsci.edu' }]
+requires-python = '>=3.9'
+classifiers = [
+  'Development Status :: 5 - Production/Stable',
+  "License :: OSI Approved :: BSD License",
+  'Programming Language :: Python',
+  'Programming Language :: Python :: 3',
+  'Programming Language :: Python :: 3.9',
+  'Programming Language :: Python :: 3.10',
+  'Programming Language :: Python :: 3.11',
+]
+dynamic = [
+  'version',
+]
+dependencies = [
+    "asdf",
+    "astropy>=5.0.4",
+    "docutils",
+    "mistune>=3",
+    "packaging",
+    "sphinx",
+    "sphinx-astropy",
+    "sphinx_bootstrap_theme",
+    "sphinx-rtd-theme",
+    "toml",
+
+]
+[project.optional-dependencies]
+tests = [
+  "pytest",
+]
+[project.urls]
+'documentation' = 'https://sphinx-asdf.readthedocs.io/en/stable'
+'repository' = 'https://github.com/asdf-format/sphinx-asdf'
+'tracker' = 'https://github.com/asdf-format/sphinx-asdf/issues'
+
+[tool.setuptools.packages.find]
+include = ['sphinx_asdf*']
+
 [build-system]
 requires = ["setuptools>=42", "setuptools_scm[toml]>=3.4", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -20,5 +64,21 @@ force-exclude = '''
 
 [tool.isort]
 profile = "black"
-filter_files = true
-line_length = 120
+filter-files = true
+line-length = 120
+
+[tool.ruff]
+target-version = "py38"
+line-length = 120
+select = [
+    # minimal set to match pre-ruff behavior
+    "E", # pycodestyle
+    "F", # pyflakes, autoflake
+    "I", # isort
+    "S", # bandit
+    "UP", # pyupgrade
+    "RUF",  # ruff specific, includes yesqa
+]
+
+[tool.codespell]
+skip="*.pdf,*.asdf,.tox,build,./tags,.git,docs/_build"
