@@ -208,6 +208,12 @@ class AsdfSchema(SphinxDirective):
             if shorten and not schema_id:
                 refname = components[-1]
         elif shorten:
+            # TODO this should probably be:
+            #   refname = schema_id
+            # as it was previously
+            #   rename = schema_id
+            # and ruff cleaned this up as unused. However, changing it
+            # to refname breaks some downstream packages
             pass
 
         return refname, schema_id + fragment
