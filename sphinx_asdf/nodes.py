@@ -1,12 +1,8 @@
 from docutils import nodes
-from jinja2 import Environment
 
-template_env = Environment()
-headerlink_template = template_env.from_string(
+headerlink_template = """
+  <a class="headerlink" name="{name}" href="#{name}" title="{title}">¶</a>
     """
-  <a class="headerlink" name="{{ name }}" href="#{{ name }}" title="{{ title }}">¶</a>
-    """
-)
 
 
 class schema_doc(nodes.compound):
@@ -57,7 +53,7 @@ class section_header(nodes.line):
         self.body.append(r'<h3 class="section-header">')
 
     def depart_html(self, node):
-        self.body.append(headerlink_template.render(name=node[0].title()))
+        self.body.append(headerlink_template.format(name=node[0].title(), title=""))
         self.body.append(r"</h3>")
 
 
