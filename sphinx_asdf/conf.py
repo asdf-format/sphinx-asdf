@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy
 import toml
 
-# Ensure documentation examples are determinstically random.
+# Ensure documentation examples are deterministically random.
 try:
     numpy.random.seed(int(os.environ["SOURCE_DATE_EPOCH"]))
 except KeyError:
