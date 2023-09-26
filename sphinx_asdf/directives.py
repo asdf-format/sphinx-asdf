@@ -270,7 +270,7 @@ class AsdfSchema(SphinxDirective):
                 text = f"Maximum length: {schema['maxItems']}"
                 node_list.append(nodes.line(text=text))
             if "additionalItems" in schema and "items" in schema:
-                if isinstance(schema["items"], list) and schema["additionalItems"] == False:
+                if isinstance(schema["items"], list) and schema["additionalItems"] is False:
                     node_list.append(nodes.emphasis(text="Additional items not permitted"))
             elif not ("minItems" in schema or "maxItems" in schema):
                 node_list.append(nodes.emphasis(text="No length restriction"))

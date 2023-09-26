@@ -72,7 +72,7 @@ target-version = "py38"
 line-length = 120
 select = [
     # minimal set to match pre-ruff behavior
-    #"E", # pycodestyle
+    "E", # pycodestyle
     "F", # pyflakes, autoflake
     "I", # isort
     "S", # bandit

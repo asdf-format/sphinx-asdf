@@ -100,8 +100,8 @@ class AsdfDirective(Directive):
         cwd = os.getcwd()
         os.chdir(TMPDIR)
 
-        show_header = not ("no_header" in self.arguments)
-        show_bocks = not ("no_blocks" in self.arguments)
+        show_header = "no_header" not in self.arguments
+        show_bocks = "no_blocks" not in self.arguments
 
         parts = []
         try:
