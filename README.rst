@@ -171,8 +171,10 @@ resolved as links, include the following in your ``docs/conf.py`` file:
 .. code-block:: python
 
    asdf_schema_reference_mappings = [
-       ('tag:stsci.edu:asdf',
-        'http://asdf-standard.readthedocs.io/en/latest/generated/stsci.edu/asdf/'),
+       (
+           "tag:stsci.edu:asdf",
+           "http://asdf-standard.readthedocs.io/en/latest/generated/stsci.edu/asdf/",
+       ),
    ]
 
 Inline documentation
