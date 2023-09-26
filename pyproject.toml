@@ -76,7 +76,7 @@ select = [
     "F", # pyflakes, autoflake
     "I", # isort
     "S", # bandit
-    #"UP", # pyupgrade
+    "UP", # pyupgrade
     #"RUF",  # ruff specific, includes yesqa
 ]
 extend-ignore = [
