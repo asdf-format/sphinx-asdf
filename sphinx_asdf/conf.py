@@ -1,3 +1,5 @@
+# datetime is kept here as some downstream packages currently
+# expect it to be imported when this file is star imported
 import datetime  # noqa: F401
 import os
 import sys
