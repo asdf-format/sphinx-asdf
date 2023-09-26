@@ -208,7 +208,7 @@ class AsdfSchema(SphinxDirective):
             if shorten and not schema_id:
                 refname = components[-1]
         elif shorten:
-            refname = schema_id
+            pass
 
         return refname, schema_id + fragment
 
