@@ -92,7 +92,7 @@ def test_basic_build(app, status, warning):
         doctree_path = app.doctreedir / "generated" / f"{name}.doctree"
         doc = pickle.loads(doctree_path.read_bytes())  # noqa: S301
 
-        title = list(doc.findall(nodes.title))[0]
+        title = next(iter(doc.findall(nodes.title)))
         assert title.astext() == name
 
         schema_top = list(doc.findall(sa_nodes.schema_doc))
