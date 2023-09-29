@@ -204,11 +204,17 @@ class AsdfSchema(SphinxDirective):
             schema_id = self._resolve_reference(schema_id)
         if fragment:
             components = fragment.split("/")
-            fragment = "#{}".format("-".join(components[1:]))
+            fragment = f"#{'-'.join(components[1:])}"
             if shorten and not schema_id:
                 refname = components[-1]
         elif shorten:
-            rename = schema_id
+            # TODO this should probably be:
+            #   refname = schema_id
+            # as it was previously
+            #   rename = schema_id
+            # and ruff cleaned this up as unused. However, changing it
+            # to refname breaks some downstream packages
+            pass
 
         return refname, schema_id + fragment
 
@@ -253,10 +259,10 @@ class AsdfSchema(SphinxDirective):
             if not ("minLength" in schema or "maxLength" in schema):
                 node_list.append(nodes.emphasis(text="No length restriction"))
             if schema.get("minLength", 0):
-                text = "Minimum length: {}".format(schema["minLength"])
+                text = f"Minimum length: {schema['minLength']}"
                 node_list.append(nodes.line(text=text))
             if "maxLength" in schema:
-                text = "Maximum length: {}".format(schema["maxLength"])
+                text = f"Maximum length: {schema['maxLength']}"
                 node_list.append(nodes.line(text=text))
             if "pattern" in schema:
                 node_list.append(nodes.line(text="Must match the following pattern:"))
@@ -264,13 +270,13 @@ class AsdfSchema(SphinxDirective):
 
         elif typename == "array":
             if schema.get("minItems", 0):
-                text = "Minimum length: {}".format(schema["minItems"])
+                text = f"Minimum length: {schema['minItems']}"
                 node_list.append(nodes.line(text=text))
             if "maxItems" in schema:
-                text = "Maximum length: {}".format(schema["maxItems"])
+                text = f"Maximum length: {schema['maxItems']}"
                 node_list.append(nodes.line(text=text))
             if "additionalItems" in schema and "items" in schema:
-                if isinstance(schema["items"], list) and schema["additionalItems"] == False:
+                if isinstance(schema["items"], list) and schema["additionalItems"] is False:
                     node_list.append(nodes.emphasis(text="Additional items not permitted"))
             elif not ("minItems" in schema or "maxItems" in schema):
                 node_list.append(nodes.emphasis(text="No length restriction"))
@@ -281,10 +287,10 @@ class AsdfSchema(SphinxDirective):
         # TODO: more numerical validation keywords
         elif typename in ["integer", "number"]:
             if "minimum" in schema:
-                text = "Minimum value: {}".format(schema["minimum"])
+                text = f"Minimum value: {schema['minimum']}"
                 node_list.append(nodes.line(text=text))
             if "maximum" in schema:
-                text = "Maximum value: {}".format(schema["maximum"])
+                text = f"Maximum value: {schema['maximum']}"
                 node_list.append(nodes.line(text=text))
 
         if "enum" in schema:

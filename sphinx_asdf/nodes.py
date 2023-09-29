@@ -1,12 +1,8 @@
 from docutils import nodes
-from jinja2 import Environment
 
-template_env = Environment()
-headerlink_template = template_env.from_string(
+headerlink_template = """
+  <a class="headerlink" name="{name}" href="#{name}" title="{title}">¶</a>
     """
-  <a class="headerlink" name="{{ name }}" href="#{{ name }}" title="{{ title }}">¶</a>
-    """
-)
 
 
 class schema_doc(nodes.compound):
@@ -57,7 +53,7 @@ class section_header(nodes.line):
         self.body.append(r'<h3 class="section-header">')
 
     def depart_html(self, node):
-        self.body.append(headerlink_template.render(name=node[0].title()))
+        self.body.append(headerlink_template.format(name=node[0].title(), title=""))
         self.body.append(r"</h3>")
 
 
@@ -90,7 +86,7 @@ class schema_property_details(nodes.compound):
         self.body.append(r"<table><tr>")
         self.body.append("<td><b>")
         if node.get("ref", None) is not None:
-            self.body.append("<a href={}>{}</a>".format(node.get("ref"), node.get("typ")))
+            self.body.append(f"<a href={node.get('ref')}>{node.get('typ')}</a>")
         else:
             self.body.append(node.get("typ"))
         self.body.append("</b></td>")
@@ -111,7 +107,7 @@ class asdf_tree(nodes.bullet_list):
 
 class asdf_ref(nodes.line):
     def visit_html(self, node):
-        self.body.append('<a class="asdf_ref" href="{}">'.format(node.get("href")))
+        self.body.append(f"<a class=\"asdf_ref\" href=\"{node.get('href')}\">")
 
     def depart_html(self, node):
         self.body.append(r"</a>")

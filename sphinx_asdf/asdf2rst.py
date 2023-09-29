@@ -29,7 +29,7 @@ class RunCodeDirective(Directive):
 
         try:
             try:
-                exec(code, GLOBALS)
+                exec(code, GLOBALS)  # noqa: S102
             except Exception:
                 print(code)
                 raise
@@ -75,7 +75,7 @@ def _block_to_string(block):
         if header["flags"] & key:
             human_flags.append(val)
     if len(human_flags):
-        lines.append("    flags: {}".format(" | ".join(human_flags)))
+        lines.append(f"    flags: {' | '.join(human_flags)}")
     if header["compression"] and header["compression"] != b"\0\0\0\0":
         lines.append(f"    compression: {header['compression']}")
     lines.append(f"    allocated_size: {header['allocated_size']}")
@@ -100,8 +100,8 @@ class AsdfDirective(Directive):
         cwd = os.getcwd()
         os.chdir(TMPDIR)
 
-        show_header = not ("no_header" in self.arguments)
-        show_bocks = not ("no_blocks" in self.arguments)
+        show_header = "no_header" not in self.arguments
+        show_bocks = "no_blocks" not in self.arguments
 
         parts = []
         try:

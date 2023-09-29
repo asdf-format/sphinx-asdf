@@ -1,7 +1,6 @@
 import logging
 import os
 import posixpath
-import warnings
 
 import docutils
 import packaging.version

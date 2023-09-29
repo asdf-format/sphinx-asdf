@@ -1,16 +1,8 @@
-import datetime
+# datetime is kept here as some downstream packages currently
+# expect it to be imported when this file is star imported
+import datetime  # noqa: F401
 import os
 import sys
-from pathlib import Path
-
-import numpy
-import toml
-
-# Ensure documentation examples are determinstically random.
-try:
-    numpy.random.seed(int(os.environ["SOURCE_DATE_EPOCH"]))
-except KeyError:
-    pass
 
 try:
     from sphinx_astropy.conf.v1 import *

@@ -1,7 +1,5 @@
 import os
 
-from sphinx.builders.html import StandaloneHTMLBuilder
-
 from .asdf2rst import AsdfDirective, RunCodeDirective
 from .connections import (
     add_labels_to_nodes,
@@ -10,7 +8,7 @@ from .connections import (
     on_build_finished,
     update_app_config,
 )
-from .directives import AsdfAutoschemas, AsdfSchema, schema_def
+from .directives import AsdfAutoschemas, AsdfSchema
 from .nodes import add_asdf_nodes
 
 

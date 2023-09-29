@@ -4,7 +4,6 @@ to maintain consistency with the old custom markdown to
 rst converter that used to be in this file.
 """
 
-import re
 import textwrap
 
 import mistune
