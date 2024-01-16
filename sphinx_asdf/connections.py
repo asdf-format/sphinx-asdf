@@ -154,11 +154,3 @@ def add_labels_to_nodes(app, document):
         anonlabels[name] = docname, labelid
         # labelname -> docname, labelid, sectionname
         labels[name] = docname, labelid, ""
-
-
-def on_build_finished(app, exc):
-    if exc is None:
-        for asset in ["sphinx_asdf.css"]:
-            src = posixpath.join(posixpath.dirname(__file__), "static", asset)
-            dst = posixpath.join(app.outdir, "_static")
-            copy_asset(src, dst)
