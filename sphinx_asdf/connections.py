@@ -8,11 +8,8 @@ import sphinx.builders
 from docutils import nodes
 from sphinx.util import rst
 from sphinx.util.docutils import sphinx_domains
-from sphinx.util.fileutil import copy_asset
 
 from .directives import schema_def
-from .nodes import schema_doc
-
 
 # docutils 0.19.0 fixed a bug in traverse/findall
 # https://sourceforge.net/p/docutils/bugs/448/

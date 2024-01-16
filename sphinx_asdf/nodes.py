@@ -49,7 +49,7 @@ class schema_description(nodes.compound):
 
 class section_header(nodes.line):
     def visit_html(self, node):
-        self.body.append(r'<h3>')
+        self.body.append(r"<h3>")
 
     def depart_html(self, node):
         self.body.append(headerlink_template.format(name=node[0].title(), title=""))
