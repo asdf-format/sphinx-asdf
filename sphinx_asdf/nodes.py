@@ -74,10 +74,10 @@ class schema_property(nodes.compound):
 
 class schema_property_name(nodes.line):
     def visit_html(self, node):
-        self.body.append(r'<div class="schema-property-name">')
+        self.body.append(r'<div class="schema-property-name"><h4>')
 
     def depart_html(self, node):
-        self.body.append(r"</div>")
+        self.body.append(r"</h4></div>")
 
 
 class schema_property_details(nodes.compound):
