@@ -42,7 +42,7 @@ def find_autoasdf_directives(env, filename):
         builder.read_doc(docname)
         doctree = env.get_and_resolve_doctree(docname, builder)
 
-    return traverse(doctree, cchema_def)
+    return traverse(doctree, schema_def)
 
 
 def find_autoschema_references(app, genfiles):
