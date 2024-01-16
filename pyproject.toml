@@ -26,7 +26,6 @@ dependencies = [
     "packaging",
     "sphinx",
     "sphinx-astropy",
-    "sphinx_bootstrap_theme",
     "sphinx-rtd-theme",
     "toml",
 

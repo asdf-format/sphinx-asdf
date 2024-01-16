@@ -140,14 +140,9 @@ class example_description(nodes.compound):
 class schema_combiner_body(nodes.compound):
     def visit_html(self, node):
         self.body.append(
-            """
-<button class="btn btn-primary" data-toggle="collapse" href="#{0}" aria-expanded="false">
-    <span class="hidden">Hide </span>Details
-</button>
-<div class="collapse" id="{0}">
-        """.format(
-                node.get("path")
-            )
+            f"""
+<div id="{node.get('path')}">
+        """
         )
 
     def depart_html(self, node):
