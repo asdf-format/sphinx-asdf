@@ -13,7 +13,6 @@ from sphinx.util.fileutil import copy_asset
 from .directives import schema_def
 from .nodes import schema_doc
 
-TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "templates")
 
 # docutils 0.19.0 fixed a bug in traverse/findall
 # https://sourceforge.net/p/docutils/bugs/448/
@@ -43,7 +42,7 @@ def find_autoasdf_directives(env, filename):
         builder.read_doc(docname)
         doctree = env.get_and_resolve_doctree(docname, builder)
 
-    return traverse(doctree, schema_def)
+    return traverse(doctree, cchema_def)
 
 
 def find_autoschema_references(app, genfiles):
@@ -117,13 +116,6 @@ def update_app_config(app, config):
 
     dist = get_distribution("sphinx_asdf")
     config.html_context["sphinx_asdf_version"] = dist.version
-
-
-def handle_page_context(app, pagename, templatename, ctx, doctree):
-    # Use custom template when rendering pages containing schema documentation.
-    # This allows us to selectively include bootstrap
-    if doctree is not None and traverse(doctree, schema_doc):
-        return os.path.join(TEMPLATE_PATH, "schema.html")
 
 
 def normalize_name(name):

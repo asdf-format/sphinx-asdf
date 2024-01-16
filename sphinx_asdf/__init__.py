@@ -4,7 +4,6 @@ from .asdf2rst import AsdfDirective, RunCodeDirective
 from .connections import (
     add_labels_to_nodes,
     autogenerate_schema_docs,
-    handle_page_context,
     on_build_finished,
     update_app_config,
 )
@@ -27,7 +26,6 @@ def setup(app):
 
     app.connect("builder-inited", autogenerate_schema_docs)
     app.connect("config-inited", update_app_config)
-    app.connect("html-page-context", handle_page_context)
     app.connect("doctree-read", add_labels_to_nodes)
     app.connect("build-finished", on_build_finished)
 
