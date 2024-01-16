@@ -1,13 +1,13 @@
-div.schema_title {
+div.schema-title {
     font-size: 1.5em;
     font-weight: bold;
 }
 
-div.property_description {
+div.property-description {
     font-side: 1em;
 }
 
-div.schema_property_name {
+div.schema-property-name {
     font-size: 1.5em;
     font-weight: bold;
 }
@@ -16,11 +16,11 @@ table {
     width: 30%;
 }
 
-td.schema_property_required {
+td.schema-property-required {
     font-style: italic;
 }
 
-.asdf_ref {
+.asdf-ref {
     font-size: 1.5em;
     font-weight: bold;
 }

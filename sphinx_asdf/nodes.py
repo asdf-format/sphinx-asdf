@@ -17,7 +17,7 @@ class schema_doc(nodes.compound):
 
 class schema_title(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<div class="schema_title">')
+        self.body.append(r'<div class="schema-title">')
 
     def depart_html(self, node):
         self.body.append(r"</div>")
@@ -42,7 +42,7 @@ class schema_header_title(nodes.line):
 
 class schema_description(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<div class="property_description"')
+        self.body.append(r'<div class="property-description">')
 
     def depart_html(self, node):
         self.body.append(r"</div>")
@@ -50,7 +50,7 @@ class schema_description(nodes.compound):
 
 class section_header(nodes.line):
     def visit_html(self, node):
-        self.body.append(r'<h3 class="section-header">')
+        self.body.append(r'<h3>')
 
     def depart_html(self, node):
         self.body.append(headerlink_template.format(name=node[0].title(), title=""))
@@ -59,7 +59,7 @@ class section_header(nodes.line):
 
 class schema_properties(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<div class="schema_properties" id="{}">'.format(node.get("id")))
+        self.body.append(r'<div class="schema-properties" id="{}">'.format(node.get("id")))
 
     def depart_html(self, node):
         self.body.append(r"</div>")
@@ -67,7 +67,7 @@ class schema_properties(nodes.compound):
 
 class schema_property(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<li class="list-group-item" id="{}">'.format(node.get("id")))
+        self.body.append(r'<li class="schema-property" id="{}">'.format(node.get("id")))
 
     def depart_html(self, node):
         self.body.append(r"</li>")
@@ -75,7 +75,7 @@ class schema_property(nodes.compound):
 
 class schema_property_name(nodes.line):
     def visit_html(self, node):
-        self.body.append(r'<div class="schema_property_name">')
+        self.body.append(r'<div class="schema-property-name">')
 
     def depart_html(self, node):
         self.body.append(r"</div>")
@@ -99,7 +99,7 @@ class schema_property_details(nodes.compound):
 
 class asdf_tree(nodes.bullet_list):
     def visit_html(self, node):
-        self.body.append(r'<ul class="list-group">')
+        self.body.append(r'<ul class="asdf-tree">')
 
     def depart_html(self, node):
         self.body.append(r"</ul>")
@@ -107,7 +107,7 @@ class asdf_tree(nodes.bullet_list):
 
 class asdf_ref(nodes.line):
     def visit_html(self, node):
-        self.body.append(f"<a class=\"asdf_ref\" href=\"{node.get('href')}\">")
+        self.body.append(f'<a class="asdf-ref" href="{node.get("href")}">')
 
     def depart_html(self, node):
         self.body.append(r"</a>")
@@ -123,7 +123,7 @@ class example_section(nodes.compound):
 
 class example_item(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<div class="item example-item">')
+        self.body.append(r'<div class="example-item">')
 
     def depart_html(self, node):
         self.body.append(r"</div>")
@@ -141,7 +141,7 @@ class schema_combiner_body(nodes.compound):
     def visit_html(self, node):
         self.body.append(
             f"""
-<div id="{node.get('path')}">
+<div class="combiner-body" id="{node.get('path')}">
         """
         )
 
