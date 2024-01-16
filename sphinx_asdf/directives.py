@@ -146,14 +146,13 @@ class AsdfSchema(SphinxDirective):
         return [docnodes]
 
     def _create_toc(self, schema):
-        toc = nodes.compound()
+        toc = nodes.bullet_list()
         toc.append(toc_link(text=SCHEMA_DEF_SECTION_TITLE))
         if "examples" in schema:
             toc.append(toc_link(text=EXAMPLE_SECTION_TITLE))
         if "definitions" in schema:
             toc.append(toc_link(text=INTERNAL_DEFINITIONS_SECTION_TITLE))
         toc.append(toc_link(text=ORIGINAL_SCHEMA_SECTION_TITLE))
-        toc.append(nodes.paragraph())
         return toc
 
     def _markdown_to_nodes(self, text, filename):

@@ -23,13 +23,12 @@ class schema_title(nodes.compound):
         self.body.append(r"</div>")
 
 
-class toc_link(nodes.line):
+class toc_link(nodes.bullet_list):
     def visit_html(self, node):
-        text = node[0].title()
-        self.body.append(f'<a class="toc-link" href="#{text}">')
+        self.body.append(f'<li><a class="toc-link" href="#{node["text"]}">{node["text"]}')
 
     def depart_html(self, node):
-        self.body.append("</a>")
+        self.body.append("</a></li>")
 
 
 class schema_header_title(nodes.line):
