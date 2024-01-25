@@ -146,7 +146,7 @@ class AsdfSchema(SphinxDirective):
         return [docnodes]
 
     def _create_toc(self, schema):
-        toc = nodes.compound()
+        toc = nodes.bullet_list()
         toc.append(toc_link(text=SCHEMA_DEF_SECTION_TITLE))
         if "examples" in schema:
             toc.append(toc_link(text=EXAMPLE_SECTION_TITLE))
@@ -226,7 +226,7 @@ class AsdfSchema(SphinxDirective):
 
     def _create_enum_node(self, enum_values):
         enum_nodes = nodes.compound()
-        enum_nodes.append(nodes.line(text="Only the following values are valid for this node:"))
+        enum_nodes.append(nodes.paragraph(text="Only the following values are valid for this node:"))
         markdown = "\n".join([f"* **{val}**" for val in enum_values])
         enum_nodes.extend(self._markdown_to_nodes(markdown, ""))
         return enum_nodes
@@ -240,14 +240,14 @@ class AsdfSchema(SphinxDirective):
         node_list = nodes.compound()
         if isinstance(items, list):
             text = "The first {} item{} in the list must be the following types:"
-            node_list.append(nodes.line(text=text.format(len(items), "s" if len(items) > 1 else "")))
+            node_list.append(nodes.paragraph(text=text.format(len(items), "s" if len(items) > 1 else "")))
             item_list = nodes.bullet_list()
             for i, it in enumerate(items):
                 item_path = self._append_to_path(path, i)
                 item_list.append(self._process_properties(it, top=True, path=item_path))
             node_list.append(item_list)
         else:
-            node_list.append(nodes.line(text="Items in the array are restricted to the following types:"))
+            node_list.append(nodes.paragraph(text="Items in the array are restricted to the following types:"))
             node_list.append(self._process_properties(items, top=True, path=path))
         return node_list
 
@@ -260,21 +260,21 @@ class AsdfSchema(SphinxDirective):
                 node_list.append(nodes.emphasis(text="No length restriction"))
             if schema.get("minLength", 0):
                 text = f"Minimum length: {schema['minLength']}"
-                node_list.append(nodes.line(text=text))
+                node_list.append(nodes.paragraph(text=text))
             if "maxLength" in schema:
                 text = f"Maximum length: {schema['maxLength']}"
-                node_list.append(nodes.line(text=text))
+                node_list.append(nodes.paragraph(text=text))
             if "pattern" in schema:
-                node_list.append(nodes.line(text="Must match the following pattern:"))
+                node_list.append(nodes.paragraph(text="Must match the following pattern:"))
                 node_list.append(nodes.literal_block(text=schema["pattern"], language="none"))
 
         elif typename == "array":
             if schema.get("minItems", 0):
                 text = f"Minimum length: {schema['minItems']}"
-                node_list.append(nodes.line(text=text))
+                node_list.append(nodes.paragraph(text=text))
             if "maxItems" in schema:
                 text = f"Maximum length: {schema['maxItems']}"
-                node_list.append(nodes.line(text=text))
+                node_list.append(nodes.paragraph(text=text))
             if "additionalItems" in schema and "items" in schema:
                 if isinstance(schema["items"], list) and schema["additionalItems"] is False:
                     node_list.append(nodes.emphasis(text="Additional items not permitted"))
@@ -288,10 +288,10 @@ class AsdfSchema(SphinxDirective):
         elif typename in ["integer", "number"]:
             if "minimum" in schema:
                 text = f"Minimum value: {schema['minimum']}"
-                node_list.append(nodes.line(text=text))
+                node_list.append(nodes.paragraph(text=text))
             if "maximum" in schema:
                 text = f"Maximum value: {schema['maximum']}"
-                node_list.append(nodes.line(text=text))
+                node_list.append(nodes.paragraph(text=text))
 
         if "enum" in schema:
             node_list.append(self._create_enum_node(schema["enum"]))
@@ -303,10 +303,10 @@ class AsdfSchema(SphinxDirective):
                 else:
                     default = schema["default"]
                 text = f"Default value: {default}"
-                node_list.append(nodes.line(text=text))
+                node_list.append(nodes.paragraph(text=text))
             else:
                 default_node = nodes.compound()
-                default_node.append(nodes.line(text="Default value:"))
+                default_node.append(nodes.paragraph(text="Default value:"))
                 default_node.append(nodes.literal_block(text=pformat(schema["default"]), language="none"))
                 node_list.append(default_node)
 
@@ -338,7 +338,7 @@ class AsdfSchema(SphinxDirective):
             for key, node in schema["properties"].items():
                 new_path = self._append_to_path(path, key)
                 treenodes.append(self._create_property_node(key, node, key in required, path=new_path))
-            comment = nodes.line(text="This type is an object with the following properties:")
+            comment = nodes.paragraph(text="This type is an object with the following properties:")
             return schema_properties(None, *[comment, treenodes], id=path)
         elif "type" in schema:
             details = self._process_top_type(schema, path=path)

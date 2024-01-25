@@ -17,19 +17,18 @@ class schema_doc(nodes.compound):
 
 class schema_title(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<div class="schema_title">')
+        self.body.append(r'<div class="schema-title">')
 
     def depart_html(self, node):
         self.body.append(r"</div>")
 
 
-class toc_link(nodes.line):
+class toc_link(nodes.bullet_list):
     def visit_html(self, node):
-        text = node[0].title()
-        self.body.append(f'<a class="toc-link" href="#{text}">')
+        self.body.append(f'<li><a class="toc-link" href="#{node["text"]}">{node["text"]}')
 
     def depart_html(self, node):
-        self.body.append("</a>")
+        self.body.append("</a></li>")
 
 
 class schema_header_title(nodes.line):
@@ -42,7 +41,7 @@ class schema_header_title(nodes.line):
 
 class schema_description(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<div class="property_description"')
+        self.body.append(r'<div class="property-description">')
 
     def depart_html(self, node):
         self.body.append(r"</div>")
@@ -50,7 +49,7 @@ class schema_description(nodes.compound):
 
 class section_header(nodes.line):
     def visit_html(self, node):
-        self.body.append(r'<h3 class="section-header">')
+        self.body.append(r"<h3>")
 
     def depart_html(self, node):
         self.body.append(headerlink_template.format(name=node[0].title(), title=""))
@@ -59,7 +58,7 @@ class section_header(nodes.line):
 
 class schema_properties(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<div class="schema_properties" id="{}">'.format(node.get("id")))
+        self.body.append(r'<div class="schema-properties" id="{}">'.format(node.get("id")))
 
     def depart_html(self, node):
         self.body.append(r"</div>")
@@ -67,7 +66,7 @@ class schema_properties(nodes.compound):
 
 class schema_property(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<li class="list-group-item" id="{}">'.format(node.get("id")))
+        self.body.append(r'<li class="schema-property" id="{}">'.format(node.get("id")))
 
     def depart_html(self, node):
         self.body.append(r"</li>")
@@ -75,10 +74,10 @@ class schema_property(nodes.compound):
 
 class schema_property_name(nodes.line):
     def visit_html(self, node):
-        self.body.append(r'<div class="schema_property_name">')
+        self.body.append(r'<div class="schema-property-name"><h4>')
 
     def depart_html(self, node):
-        self.body.append(r"</div>")
+        self.body.append(r"</h4></div>")
 
 
 class schema_property_details(nodes.compound):
@@ -99,7 +98,7 @@ class schema_property_details(nodes.compound):
 
 class asdf_tree(nodes.bullet_list):
     def visit_html(self, node):
-        self.body.append(r'<ul class="list-group">')
+        self.body.append(r'<ul class="asdf-tree">')
 
     def depart_html(self, node):
         self.body.append(r"</ul>")
@@ -107,7 +106,7 @@ class asdf_tree(nodes.bullet_list):
 
 class asdf_ref(nodes.line):
     def visit_html(self, node):
-        self.body.append(f"<a class=\"asdf_ref\" href=\"{node.get('href')}\">")
+        self.body.append(f'<a class="asdf-ref" href="{node.get("href")}">')
 
     def depart_html(self, node):
         self.body.append(r"</a>")
@@ -123,7 +122,7 @@ class example_section(nodes.compound):
 
 class example_item(nodes.compound):
     def visit_html(self, node):
-        self.body.append(r'<div class="item example-item">')
+        self.body.append(r'<div class="example-item">')
 
     def depart_html(self, node):
         self.body.append(r"</div>")
@@ -140,14 +139,9 @@ class example_description(nodes.compound):
 class schema_combiner_body(nodes.compound):
     def visit_html(self, node):
         self.body.append(
-            """
-<button class="btn btn-primary" data-toggle="collapse" href="#{0}" aria-expanded="false">
-    <span class="hidden">Hide </span>Details
-</button>
-<div class="collapse" id="{0}">
-        """.format(
-                node.get("path")
-            )
+            f"""
+<div class="combiner-body" id="{node.get('path')}">
+        """
         )
 
     def depart_html(self, node):

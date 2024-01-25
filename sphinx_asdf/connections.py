@@ -8,12 +8,8 @@ import sphinx.builders
 from docutils import nodes
 from sphinx.util import rst
 from sphinx.util.docutils import sphinx_domains
-from sphinx.util.fileutil import copy_asset
 
 from .directives import schema_def
-from .nodes import schema_doc
-
-TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "templates")
 
 # docutils 0.19.0 fixed a bug in traverse/findall
 # https://sourceforge.net/p/docutils/bugs/448/
@@ -119,13 +115,6 @@ def update_app_config(app, config):
     config.html_context["sphinx_asdf_version"] = dist.version
 
 
-def handle_page_context(app, pagename, templatename, ctx, doctree):
-    # Use custom template when rendering pages containing schema documentation.
-    # This allows us to selectively include bootstrap
-    if doctree is not None and traverse(doctree, schema_doc):
-        return os.path.join(TEMPLATE_PATH, "schema.html")
-
-
 def normalize_name(name):
     for char in [".", "_", "/"]:
         name = name.replace(char, "-")
@@ -154,11 +143,3 @@ def add_labels_to_nodes(app, document):
         anonlabels[name] = docname, labelid
         # labelname -> docname, labelid, sectionname
         labels[name] = docname, labelid, ""
-
-
-def on_build_finished(app, exc):
-    if exc is None:
-        for asset in ["sphinx_asdf.css", "sphinx_asdf.js"]:
-            src = posixpath.join(posixpath.dirname(__file__), "static", asset)
-            dst = posixpath.join(app.outdir, "_static")
-            copy_asset(src, dst)
