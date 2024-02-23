@@ -47,7 +47,7 @@ requires = ["setuptools>=42", "setuptools_scm[toml]>=3.4", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "sphinx_asdf/_version.py"
+version_file = "sphinx_asdf/_version.py"
 
 [tool.black]
 line-length = 120
