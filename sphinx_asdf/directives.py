@@ -413,6 +413,6 @@ class AsdfSchema(SphinxDirective):
             desc_text = self._markdown_to_nodes(example[0] + ":", filename)
             description = example_description(None, *desc_text)
             node.append(description)
-            node.append(nodes.literal_block(text=example[1], language="yaml"))
+            node.append(nodes.literal_block(text=example[-1], language="yaml"))
             examples.append(node)
         return examples
