@@ -5,13 +5,11 @@ import tempfile
 import textwrap
 
 import asdf
-from asdf import AsdfFile, versioning
-from asdf.constants import ASDF_MAGIC, ASDF_STANDARD_COMMENT, BLOCK_FLAG_STREAMED
+from asdf.constants import BLOCK_FLAG_STREAMED
 from docutils import nodes
 from docutils.parsers.rst import Directive
 from sphinx.util.nodes import set_source_info
 
-version_string = str(versioning.default_version)
 TMPDIR = tempfile.mkdtemp()
 GLOBALS = {}
 FLAGS = {BLOCK_FLAG_STREAMED: "BLOCK_FLAG_STREAMED"}
@@ -105,28 +103,19 @@ class AsdfDirective(Directive):
 
         parts = []
         try:
-            ff = AsdfFile()
-            with asdf.open(filename, ignore_unrecognized_tag=True, ignore_missing_extensions=True) as af:
-                if af.version is None:
-                    asdf_standard_version = version_string
-                else:
-                    asdf_standard_version = af.version
-
-                file_version = af._file_format_version
-
-            header_comments = (
-                f"\n{ASDF_MAGIC.strip().decode('utf-8')} {file_version}\n"
-                f"#{ASDF_STANDARD_COMMENT.strip().decode('utf-8')} {asdf_standard_version}\n"
-            )
-
-            code = AsdfFile._open_impl(ff, filename, _get_yaml_content=True)
-            code = header_comments + code.strip().decode("utf-8")
-            code += "\n"
-            literal = nodes.literal_block(code, code)
-            literal["language"] = "yaml"
-            set_source_info(self, literal)
             if show_header:
-                parts.append(literal)
+                with asdf.generic_io.get_file(filename, "r") as gf:
+                    reader = gf.reader_until(
+                        asdf.constants.YAML_END_MARKER_REGEX,
+                        7,
+                        "End of YAML marker",
+                        include=True,
+                    )
+                    code = reader.read().decode("utf-8") + "\n"
+                    literal = nodes.literal_block(code, code)
+                    literal["language"] = "yaml"
+                    set_source_info(self, literal)
+                    parts.append(literal)
 
             kwargs = dict()
             # Use the ignore_unrecognized_tag parameter as a proxy for both options
