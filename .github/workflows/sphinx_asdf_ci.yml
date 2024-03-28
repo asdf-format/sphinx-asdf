@@ -25,87 +25,87 @@ jobs:
       matrix:
         include:
           - name: Python 3.12 Tests
-            python-version: "3.12-dev"
+            python-version: "3.12"
             os: ubuntu-latest
             toxenv: py312
 
-          - name: Python 3.11 Tests
+          - name: Python 3.11, with Code Coverage
             python-version: "3.11"
             os: ubuntu-latest
-            toxenv: py311
+            toxenv: coverage
 
           - name: Python 3.10 Tests
             python-version: "3.10"
             os: ubuntu-latest
             toxenv: py310
 
-          - name: Python 3.9, with Code Coverage
+          - name: Python 3.9 Tests
             python-version: "3.9"
             os: ubuntu-latest
-            toxenv: coverage
+            toxenv: py39
 
-          - name: Python 3.9, Windows
-            python-version: "3.9"
+          - name: Python 3.11, Windows
+            python-version: "3.11"
             os: windows-latest
-            toxenv: py39
+            toxenv: py311
 
-          - name: Python 3.9, MacOS
-            python-version: "3.9"
+          - name: Python 3.11, MacOS
+            python-version: "3.11"
             os: macos-latest
-            toxenv: py39
+            toxenv: py311
 
           - name: Twine
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: twine
 
           - name: Document Checks
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: checkdocs
 
           - name: Code Style Checks
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: style
 
           - name: ASDF Standard Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: asdf-standard
 
           - name: ASDF Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: asdf
 
           - name: ASDF-transform-schemas Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: asdf-transform-schemas
 
           - name: ASDF-coordinates-schemas Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: asdf-coordinates-schemas
 
           - name: ASDF-wcs-schemas Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: asdf-wcs-schemas
 
           - name: ASDF-astropy Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: asdf-astropy
 
           - name: rad Document Build
-            python-version: "3.9"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: rad
 
           - name: stdatamodels Document Build
-            python-version: "3.10"
+            python-version: "3.11"
             os: ubuntu-latest
             toxenv: stdatamodels
 
