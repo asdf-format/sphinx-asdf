@@ -33,6 +33,7 @@ dependencies = [
 [project.optional-dependencies]
 tests = [
   "pytest",
+  "defusedxml",  # sphinx.testing.fixtures requires this
 ]
 [project.urls]
 'documentation' = 'https://sphinx-asdf.readthedocs.io/en/stable'
