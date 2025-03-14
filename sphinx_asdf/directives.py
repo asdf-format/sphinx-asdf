@@ -381,6 +381,7 @@ class AsdfSchema(SphinxDirective):
         return schema_properties(None, *[container_node], id=path)
 
     def _create_property_node(self, name, tree, required, path=""):
+        title = tree.get("title", "")
         description = tree.get("description", "")
 
         if "$ref" in tree:
@@ -397,6 +398,7 @@ class AsdfSchema(SphinxDirective):
         prop = schema_property(id=path)
         prop.append(schema_property_name(text=name))
         prop.append(schema_property_details(typ=typ, required=required, ref=ref))
+        prop.append(self._parse_title(title, ""))
         prop.append(self._parse_description(description, ""))
         if typ != "object":
             prop.extend(self._process_validation_keywords(tree, typename=typ, path=path))
