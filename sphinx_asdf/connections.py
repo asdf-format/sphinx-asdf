@@ -109,10 +109,9 @@ def autogenerate_schema_docs(app):
 
 
 def update_app_config(app, config):
-    from pkg_resources import get_distribution
+    from importlib.metadata import version
 
-    dist = get_distribution("sphinx_asdf")
-    config.html_context["sphinx_asdf_version"] = dist.version
+    config.html_context["sphinx_asdf_version"] = version("sphinx_asdf")
 
 
 def normalize_name(name):
