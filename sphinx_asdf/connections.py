@@ -100,7 +100,7 @@ def autogenerate_schema_docs(app):
         return
 
     ext = list(app.config.source_suffix)
-    genfiles = [genfile + (not genfile.endswith(tuple(ext)) and ext[0] or "") for genfile in genfiles]
+    genfiles = [genfile + ((not genfile.endswith(tuple(ext)) and ext[0]) or "") for genfile in genfiles]
 
     # Read all source documentation files and parse all asdf-schema directives
     schemas = find_autoschema_references(app, genfiles)
