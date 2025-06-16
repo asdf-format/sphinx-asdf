@@ -135,10 +135,16 @@ class AsdfSchema(SphinxDirective):
         if "definitions" in schema:
             docnodes.append(section_header(text=INTERNAL_DEFINITIONS_SECTION_TITLE))
             for name in schema["definitions"]:
+                if name == "$ref":
+                    ref = self._create_ref_node(schema["definitions"]["$ref"])
                 path = f"definitions-{name}"
                 tree = schema["definitions"][name]
-                required = schema.get("required", [])
-                docnodes.append(self._create_property_node(name, tree, name in required, path=path))
+                if name == "$ref" and isinstance(tree, str):
+                    ref = self._create_ref_node(tree)
+                    docnodes.append(schema_properties(None, *[ref], id=path))
+                else:
+                    required = schema.get("required", [])
+                    docnodes.append(self._create_property_node(name, tree, name in required, path=path))
 
         docnodes.append(section_header(text=ORIGINAL_SCHEMA_SECTION_TITLE))
         docnodes.append(nodes.literal_block(text=raw_content, language="yaml"))
