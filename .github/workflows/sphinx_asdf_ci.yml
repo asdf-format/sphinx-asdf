@@ -54,16 +54,6 @@ jobs:
             os: macos-latest
             toxenv: py313
 
-          - name: Twine
-            python-version: "3.13"
-            os: ubuntu-latest
-            toxenv: twine
-
-          - name: Document Checks
-            python-version: "3.13"
-            os: ubuntu-latest
-            toxenv: checkdocs
-
           - name: Code Style Checks
             python-version: "3.13"
             os: ubuntu-latest
