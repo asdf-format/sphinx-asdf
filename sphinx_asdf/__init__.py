@@ -1,5 +1,3 @@
-import os
-
 from .asdf2rst import AsdfDirective, RunCodeDirective
 from .connections import (
     add_labels_to_nodes,
