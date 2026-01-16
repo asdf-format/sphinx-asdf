@@ -27,8 +27,4 @@ def setup(app):
     app.connect("config-inited", update_app_config)
     app.connect("doctree-read", add_labels_to_nodes)
 
-    static_dir = os.path.join(os.path.dirname(__file__), "static")
-
-    app.config._raw_config.setdefault("html_static_path", []).append(static_dir)
-
     return dict(version="0.1.1", parallel_read_safe=True, parallel_write_safe=True)
