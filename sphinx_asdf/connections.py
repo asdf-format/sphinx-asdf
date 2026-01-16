@@ -37,7 +37,11 @@ def find_autoasdf_directives(app, env, filename):
     with sphinx_domains(env), rst.default_role(docname, env.config.default_role):
         builder = sphinx.builders.text.TextBuilder(app, env)
         builder.read_doc(docname)
-        doctree = env.get_and_resolve_doctree(docname, builder, tags=app.tags)
+        if sphinx.__version__ >= "9.0.0":
+            kwargs = {"tags": app.tags}
+        else:
+            kwargs = {}
+        doctree = env.get_and_resolve_doctree(docname, builder, **kwargs)
 
     return traverse(doctree, schema_def)
 
