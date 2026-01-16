@@ -21,7 +21,6 @@ dependencies = [
     "sphinx",
     "toml",
     "numpydoc",
-    "pytest-doctestplus>=0.11",
     "sphinx-automodapi",
     "sphinxcontrib-jquery",
 ]
