@@ -28,16 +28,16 @@ else:
         return doctree.traverse(*args, **kwargs)
 
 
-def find_autoasdf_directives(env, filename):
+def find_autoasdf_directives(app, env, filename):
     if filename.endswith(".md"):
         return []
 
     docname = env.path2doc(filename)
     env.prepare_settings(docname)
     with sphinx_domains(env), rst.default_role(docname, env.config.default_role):
-        builder = sphinx.builders.text.TextBuilder(env.app, env)
+        builder = sphinx.builders.text.TextBuilder(app, env)
         builder.read_doc(docname)
-        doctree = env.get_and_resolve_doctree(docname, builder)
+        doctree = env.get_and_resolve_doctree(docname, builder, tags=app.tags)
 
     return traverse(doctree, schema_def)
 
@@ -58,7 +58,7 @@ def find_autoschema_references(app, genfiles):
         # Create documentation files based on contents of asdf-schema directives
         path = posixpath.join(app.env.srcdir, fn)
         app.env.temp_data["docname"] = app.env.path2doc(path)
-        schemas = schemas.union(find_autoasdf_directives(app.env, path))
+        schemas = schemas.union(find_autoasdf_directives(app, app.env, path))
 
     logger.setLevel(orig_level)
 
