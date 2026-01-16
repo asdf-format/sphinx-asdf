@@ -2,9 +2,9 @@
 name = "sphinx-asdf"
 description = "Sphinx plugin for generating documentation from ASDF schemas"
 readme = 'README.rst'
-license-files = ['LICENSE']
-authors = [{ name = 'The ASDF Developers' }]
-requires-python = '>=3.10'
+license = { file = 'LICENSE' }
+authors = [{ name = 'The ASDF Developers', email = 'help@stsci.edu' }]
+requires-python = '>=3.11'
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Programming Language :: Python',

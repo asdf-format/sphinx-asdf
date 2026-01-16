@@ -37,17 +37,22 @@ jobs:
           - name: Python 3.12 Tests
             python-version: "3.12"
             os: ubuntu-latest
+            toxenv: py314
+
+          - name: Python 3.12 Tests
+            python-version: "3.12"
+            os: ubuntu-latest
+            toxenv: py313
+
+          - name: Python 3.12 Tests
+            python-version: "3.12"
+            os: ubuntu-latest
             toxenv: py312
 
           - name: Python 3.11, with Code Coverage
             python-version: "3.11"
             os: ubuntu-latest
             toxenv: coverage
-
-          - name: Python 3.10 Tests
-            python-version: "3.10"
-            os: ubuntu-latest
-            toxenv: py310
 
           - name: Python 3.13, Windows
             python-version: "3.13"
@@ -86,7 +91,7 @@ jobs:
 
           - name: ASDF-transform-schemas Document Build
             python-version: "3.13"
-            os: ubuntu-lates
+            os: ubuntu-latest
             toxenv: asdf-transform-schemas
 
           - name: ASDF-coordinates-schemas Document Build
