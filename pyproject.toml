@@ -4,7 +4,7 @@ description = "Sphinx plugin for generating documentation from ASDF schemas"
 readme = 'README.rst'
 license-files = ['LICENSE']
 authors = [{ name = 'The ASDF Developers' }]
-requires-python = '>=3.10'
+requires-python = '>=3.11'
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Programming Language :: Python',
@@ -15,15 +15,14 @@ dynamic = [
 ]
 dependencies = [
     "asdf",
-    "astropy>=5.0.4",
     "docutils",
     "mistune>=3",
     "packaging",
     "sphinx",
-    "sphinx-astropy",
-    "sphinx-rtd-theme",
     "toml",
-
+    "numpydoc",
+    "sphinx-automodapi",
+    "sphinxcontrib-jquery",
 ]
 [project.optional-dependencies]
 tests = [
@@ -69,7 +68,7 @@ filter-files = true
 line-length = 120
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py311"
 line-length = 120
 
 [tool.ruff.lint]

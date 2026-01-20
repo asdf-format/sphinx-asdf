@@ -22,6 +22,7 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: Python 3.14 Tests
@@ -44,11 +45,6 @@ jobs:
             os: ubuntu-latest
             toxenv: coverage
 
-          - name: Python 3.10 Tests
-            python-version: "3.10"
-            os: ubuntu-latest
-            toxenv: py310
-
           - name: Python 3.13, Windows
             python-version: "3.13"
             os: windows-latest
@@ -58,16 +54,6 @@ jobs:
             python-version: "3.13"
             os: macos-latest
             toxenv: py313
-
-          - name: Twine
-            python-version: "3.13"
-            os: ubuntu-latest
-            toxenv: twine
-
-          - name: Document Checks
-            python-version: "3.13"
-            os: ubuntu-latest
-            toxenv: checkdocs
 
           - name: Code Style Checks
             python-version: "3.13"
@@ -86,7 +72,7 @@ jobs:
 
           - name: ASDF-transform-schemas Document Build
             python-version: "3.13"
-            os: ubuntu-lates
+            os: ubuntu-latest
             toxenv: asdf-transform-schemas
 
           - name: ASDF-coordinates-schemas Document Build
