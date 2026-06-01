@@ -16,8 +16,8 @@ def setup(app):
 
     app.add_directive("asdf-autoschemas", AsdfAutoschemas)
     app.add_directive("asdf-schema", AsdfSchema)
-    app.add_directive("runcode", RunCodeDirective)
-    app.add_directive("asdf", AsdfDirective)
+    # app.add_directive("runcode", RunCodeDirective)
+    # app.add_directive("asdf", AsdfDirective)
 
     add_asdf_nodes(app)
 
