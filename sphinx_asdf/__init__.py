@@ -1,4 +1,3 @@
-from .asdf2rst import AsdfDirective, RunCodeDirective
 from .connections import (
     add_labels_to_nodes,
     autogenerate_schema_docs,
@@ -16,8 +15,6 @@ def setup(app):
 
     app.add_directive("asdf-autoschemas", AsdfAutoschemas)
     app.add_directive("asdf-schema", AsdfSchema)
-    app.add_directive("runcode", RunCodeDirective)
-    app.add_directive("asdf", AsdfDirective)
 
     add_asdf_nodes(app)
 
